@@ -18,6 +18,7 @@ void init_external_interrupts(void);
 void displayResults(void);
 void enterSleepMode(uint8_t m);
 
+
 void init_power_saving(void)
 {
     power_timer0_disable();
@@ -40,6 +41,23 @@ void init_external_interrupts(void)
     EIMSK |= _BV(INT0); //Enabled interrupt 0 (PD2)
     sei(); //Enable interrupts
 }
+
+void init_spi_master(void)
+{ 
+    DDRB = _BV(PB4) | _BV(PB5) | _BV(PB7);
+    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPI2X); 
+}
+void SPIMasterTransmit(char data) 
+{ 
+    SPDR = data;
+    while(!(SPSR & _BV(SPIF))); 
+}
+
+uint8_t SPISlaveRecieve(void) 
+{ 
+    while(!(SPSR & _BV(SPIF)));
+    return SPDR; 
+ }
 
 ISR(INT0_vect) //interrupt 0 handler (used for triggering adc conversions)
 {
@@ -85,17 +103,24 @@ void enterSleepMode(uint8_t m) {
 
 int main(void)
 {
-	init_debug_uart0();
-    printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	printf("\nUART debug init complete");
-    init_adc();
-    printf("\nADC init complete");
-    init_power_saving();
-    printf("\nPower saving complete:\n\ttimer0 disabled \n\ttimer1 disabled \n\ttwi disabled \n\tusart1 disabled");
-    init_external_interrupts();
-    printf("\nINT0 external interupt enabled");
-    _delay_ms(1); //Device enters sleep too fast for UART to send data 
-    
-	while(1) { enterSleepMode(STANDBY); //Keep device in standby while waiting for external interrupt
+    init_spi_master();
+    for(;;) {
+        SPIMasterTransmit('e');
+        _delay_ms(500);
     }
+    
+        
+	// init_debug_uart0();
+    // printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+	// printf("\nUART debug init complete");
+    // init_adc();
+    // printf("\nADC init complete");
+    // init_power_saving();
+    // printf("\nPower saving complete:\n\ttimer0 disabled \n\ttimer1 disabled \n\ttwi disabled \n\tusart1 disabled");
+    // init_external_interrupts();
+    // printf("\nINT0 external interupt enabled");
+    // _delay_ms(1); //Device enters sleep too fast for UART to send data 
+    
+	// while(1) { enterSleepMode(STANDBY); //Keep device in standby while waiting for external interrupt
+    // }
 }
