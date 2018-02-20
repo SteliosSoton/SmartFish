@@ -47,15 +47,15 @@ uint8_t rx(void) {
 
 int main(void)
 {
-	// init_spi_master();	// initialise SPI as master or slave
-    init_spi_slave();
+	init_spi_master();	// initialise SPI as master or slave
+    // init_spi_slave();
     
-    while(1) {
-        printf("%d", rx(););
-    }
+    // while(1) {
+        // printf("%d", rx(););
+    // }
     
-	// while(1){
-		// tx(150);
-		// _delay_ms(500);
-	// }
+	while(1){
+		tx(150);
+		_delay_ms(500);
+	}
 }
