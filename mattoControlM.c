@@ -16,7 +16,8 @@ void init_spi_master(void) {
 
 	PORTB |= _BV(PB4); //Set SS pin high as this is default setting for SPI communications
 
-	SPCR = _BV(SPE) | _BV(MSTR) | ~_BV(SPI2X) | _BV(SPR0) | _BV(SPR1);	// SPI Control Register
+	SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPR0) | _BV(SPR1);	// SPI Control Register
+    SPCR &= ~_BV(SPI2X);
 	// SPE - the SPI is enabled when this bit is 1
 	// MSTR - configures SPI as master
 	// SPI2X, SPR0, SPR1 - configure SPI clock frequency (0 1 1 fosc/128)
@@ -25,6 +26,7 @@ void tx(uint8_t sendData) {
     PORTB &= ~_BV(PB4); //Set Atmega SS pin low so it knows it should listen
 	SPDR = sendData;	// configure SPI Data Register
 	while(!(SPSR & _BV(SPIF)));	// wait for transmission complete
+    printf("\nSent data: %d", sendData);
     PORTB |= _BV(PB4); //Set atmega SS pin high 
 }
 
@@ -32,11 +34,11 @@ int main(void)
 {
 	init_spi_master();	// initialise SPI as master or slave
 	init_debug_uart0();	// initialise UART debug
-
+    uint8_t i;
 	for(;;) {
-        for(uint8_t i = 0; i < 100; i++) {
+        for(i = 0; i < 100; i++) {
 			tx(i);
-			printf("\n%c", i);
+            _delay_ms(100);
 		}
 	}
 }

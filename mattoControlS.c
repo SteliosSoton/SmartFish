@@ -23,6 +23,6 @@ int main(void) {
     init_debug_uart0();
     
     while(1) {
-        printf("%d", rx());
+        printf("\nData recieved: %d", rx());
     }
 }
