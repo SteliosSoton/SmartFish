@@ -9,7 +9,16 @@
 #include <avr/io.h>
 #include <util/delay.h>
 #include "debug.h"
+#include <avr/interrupt.h>
+#include <avr/sleep.h>
+#include <avr/power.h>
 
+#define STANDBY 4
+#define IDLE 0
+
+void init_interrupts(void) {
+    sei(); 
+}
 void init_spi_master(void) {
 	// out: MOSI, SCK, SS (in: MISO)
 	DDRB = _BV(PB4) | _BV(PB5) | _BV(PB7); // Set = 1: PB4 (SS), PB5 (MOSI), PB7(SCK)
@@ -34,11 +43,13 @@ int main(void)
 {
 	init_spi_master();	// initialise SPI as master or slave
 	init_debug_uart0();	// initialise UART debug
+    init_interrupts();
+    
     uint8_t i;
 	for(;;) {
         for(i = 0; i < 100; i++) {
 			tx(i);
-            _delay_ms(100);
+            _delay_ms(1000);
 		}
 	}
 }
