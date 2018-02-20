@@ -19,6 +19,15 @@ void init_spi_master(void) {
 	/* F_SCK = F_CPU/2 */
 }
 
+void init_spi_slave(void) { /* out: MISO, in: MOSI, SCK, /SS */
+    DDRB = _BV(PB6); SPCR = _BV(SPE); /* Enable SPI */ 
+}
+
+uint8_t rx(void) {
+    while(!(SPSR & _BV(SPIF))); 
+    return SPDR; 
+}
+
 void tx(uint8_t b) {
 	SPDR = b;	// configure SPI Data Register
 	while(!(SPSR & _BV(SPIF)));	// wait for transmission complete
@@ -26,7 +35,7 @@ void tx(uint8_t b) {
 
 void init_spi_slave(void) {
 	/* out: MISO, in: MOSI, SCK, /SS */
-	DDRB = _BV(PB6);	// ?
+	DDRB = _BV(PB6);	// Pull-up resistor
 	SPCR = _BV(SPE);	/* Enable SPI */
 }
 
@@ -37,10 +46,15 @@ uint8_t rx(void) {
 
 int main(void)
 {
-	init_spi_master();	// initialise SPI as master or slave
-
-	while(1){
-		tx(150);
-		_delay_ms(500);
-	}
+	// init_spi_master();	// initialise SPI as master or slave
+    init_spi_slave();
+    
+    while(1) {
+        printf("%d", rx(););
+    }
+    
+	// while(1){
+		// tx(150);
+		// _delay_ms(500);
+	// }
 }
