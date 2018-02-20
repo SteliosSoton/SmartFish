@@ -42,10 +42,11 @@ void init_external_interrupts(void)
     sei(); //Enable interrupts
 }
 
-void init_spi_master(void)
+void init_spi_master(void) //Setups atmega as a SPI master 
 { 
-    DDRB = _BV(PB4) | _BV(PB5) | _BV(PB7);
-    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPI2X); 
+    DDRB = _BV(PB4) | _BV(PB5) | _BV(PB7); //Enable pullup resistors on portB pins 4, 5, 7
+    SPCR = _BV(SPE) | _BV(MSTR) | _BV(SPI2X);
+    SPCR = _BV(SPIE) //Enables SPI transfer complete interrupt
 }
 void SPIMasterTransmit(char data) 
 { 
@@ -58,6 +59,8 @@ uint8_t SPISlaveRecieve(void)
     while(!(SPSR & _BV(SPIF)));
     return SPDR; 
  }
+
+ISR(SPI_STC_vect)
 
 ISR(INT0_vect) //interrupt 0 handler (used for triggering adc conversions)
 {
