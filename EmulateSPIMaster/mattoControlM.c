@@ -36,7 +36,13 @@ void tx(uint8_t sendData) {
 	SPDR = sendData;	// configure SPI Data Register
 	while(!(SPSR & _BV(SPIF)));	// wait for transmission complete
     printf("\nSent data: %d", sendData);
-    PORTB |= _BV(PB4); //Set atmega SS pin high 
+    PORTB |= _BV(PB4); //Set atmega SS pin high
+    PORTB &= ~_BV(PB4); //Set Atmega SS pin low so it knows it should listen
+    SPDR = 1;
+	while(!(SPSR & _BV(SPIF)));
+    printf("\nrecieved data: %d", SPDR);
+    PORTB |= _BV(PB4); //Set atmega SS pin high
+
 }
 
 int main(void)

@@ -41,7 +41,8 @@ void init_spi_slave(void) { //Atmega is slave to ESP
 }
 
 ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer
-    printf("\nData recieved: %d", SPDR);
+	SPDR = 150;
+	printf("\nSent data %d", 150);
     /*
     * Here will go matt code for getting data to string and then depending on string,
     * call ADC function or something like water pump function (has yet to be made).
