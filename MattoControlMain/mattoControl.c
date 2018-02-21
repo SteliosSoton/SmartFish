@@ -18,7 +18,7 @@
 
 #define RECIEVE_MODE 'R';
 #define TRANSMIT_MODE 'T';
-volatile char SPIStatus = TRANSMIT_MODE;
+volatile char SPIStatus = RECIEVE_MODE;
 volatile uint8_t temp;
 
 volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interupt knows which bit to place result in
