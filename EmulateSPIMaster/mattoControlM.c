@@ -3,7 +3,7 @@
  *
  *  Created on: 19 Feb 2018
  *      Author: Matt
- *      Editted by Nathan
+ *      Edited by Nathan
  */
 
 #include <avr/io.h>
