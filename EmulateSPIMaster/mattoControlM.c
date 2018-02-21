@@ -1,9 +1,6 @@
 /*
- * SPIsetup.c
- *
- *  Created on: 19 Feb 2018
- *      Author: Matt
- *      Edited by Nathan
+ *      Author: Nathan
+ *      Contributions: Matt
  */
 
 #include <avr/io.h>
@@ -15,6 +12,11 @@
 
 #define STANDBY 4
 #define IDLE 0
+
+#define RECIEVE_MODE 'R';
+#define TRANSMIT_MODE 'T';
+volatile char SPIStatus = TRANSMIT_MODE;
+volatile uint8_t temp;
 
 void init_interrupts(void) {
     sei(); 
@@ -32,18 +34,25 @@ void init_spi_master(void) {
 	// SPI2X, SPR0, SPR1 - configure SPI clock frequency (0 1 1 fosc/128)
 }
 void tx(uint8_t sendData) {
-    PORTB &= ~_BV(PB4); //Set Atmega SS pin low so it knows it should listen
-	SPDR = sendData;	// configure SPI Data Register
-	while(!(SPSR & _BV(SPIF)));	// wait for transmission complete
-    printf("\nSent data: %d", sendData);
-    PORTB |= _BV(PB4); //Set atmega SS pin high
-    PORTB &= ~_BV(PB4); //Set Atmega SS pin low so it knows it should listen
-    SPDR = 1;
-	while(!(SPSR & _BV(SPIF)));
-    printf("\nrecieved data: %d", SPDR);
-    PORTB |= _BV(PB4); //Set atmega SS pin high
-
+    uint8_t temp;
+    switch(SPIStatus) {
+    case 'T':
+		PORTB &= ~_BV(PB4);
+    	SPDR = sendData;
+    	printf("\nSent data: %d", sendData);
+    	SPIStatus = RECIEVE_MODE;
+    	PORTB |= _BV(PB4);
+    	break;
+    case 'R':
+		PORTB &= ~_BV(PB4);
+    	SPDR = 120;
+    	printf("\nRecieved data: %d", SPDR);
+    	SPIStatus = TRANSMIT_MODE;
+    	PORTB |= _BV(PB4);
+    	break;
+    }
 }
+
 
 int main(void)
 {
@@ -55,7 +64,7 @@ int main(void)
 	for(;;) {
         for(i = 0; i < 100; i++) {
 			tx(i);
-            _delay_ms(1000);
+			_delay_ms(500);
 		}
 	}
 }

@@ -1,3 +1,8 @@
+/*
+ *      Author: Nathan
+ *      Contributions: Matt
+ */
+
 #include <avr/io.h>
 #include <util/delay.h>
 #include "debug.h"
@@ -10,6 +15,11 @@
 #define IDLE 0
 
 #define SENSOR_COUNT 2
+
+#define RECIEVE_MODE 'R';
+#define TRANSMIT_MODE 'T';
+volatile char SPIStatus = TRANSMIT_MODE;
+volatile uint8_t temp;
 
 volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interupt knows which bit to place result in
     
@@ -41,8 +51,18 @@ void init_spi_slave(void) { //Atmega is slave to ESP
 }
 
 ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer
-	SPDR = 150;
-	printf("\nSent data %d", 150);
+    switch(SPIStatus) {
+    case 'T':
+    	SPDR = temp + 1;
+    	printf("\nSent data: %d", temp + 1);
+    	SPIStatus = RECIEVE_MODE;
+    	break;
+    case 'R':
+    	temp = SPDR;
+    	printf("\nRecieved data: %d", temp);
+    	SPIStatus = TRANSMIT_MODE;
+    	break;
+    }
     /*
     * Here will go matt code for getting data to string and then depending on string,
     * call ADC function or something like water pump function (has yet to be made).
