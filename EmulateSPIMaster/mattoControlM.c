@@ -35,6 +35,8 @@ void init_spi_master(void) {
 	// SPI2X, SPR0, SPR1 - configure SPI clock frequency (0 1 1 fosc/128)
 }
 void tx(char *sendData) {
+	uint8_t firstBit = 1;
+	char bufferBit = 0;
     switch(SPIStatus) {
     case 'T':
     	for(uint8_t i = 0; i < strlen(sendData); i++) {
@@ -48,11 +50,16 @@ void tx(char *sendData) {
     	SPIStatus = RECIEVE_MODE;
     	break;
     case 'R':
-    	for(uint8_t i = 0; i < strlen(sendData); i++) {
+    	while(!(bufferBit == '$')) {
 			PORTB &= ~_BV(PB4);
 			SPDR = 120;
 			while(!(SPSR & _BV(SPIF)));
-			printf("\nRecieved data: %c", SPDR);
+			bufferBit = SPDR;
+			if(firstBit) {
+				bufferBit = '*';
+				firstBit = 0;
+			}
+			printf("\nRecieved data: %c", bufferBit);
 			PORTB |= _BV(PB4);
     	}
 		SPIStatus = TRANSMIT_MODE;
