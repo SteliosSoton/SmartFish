@@ -9,6 +9,7 @@
 #include <avr/interrupt.h>
 #include <avr/sleep.h>
 #include <avr/power.h>
+#include <string.h>
 
 #define STANDBY 4
 #define IDLE 0
@@ -33,22 +34,28 @@ void init_spi_master(void) {
 	// MSTR - configures SPI as master
 	// SPI2X, SPR0, SPR1 - configure SPI clock frequency (0 1 1 fosc/128)
 }
-void tx(uint8_t sendData) {
-    uint8_t temp;
+void tx(char *sendData) {
     switch(SPIStatus) {
     case 'T':
-		PORTB &= ~_BV(PB4);
-    	SPDR = sendData;
-    	printf("\nSent data: %d", sendData);
+    	for(uint8_t i = 0; i < strlen(sendData); i++) {
+			PORTB &= ~_BV(PB4);
+			SPDR = sendData[i];
+			while(!(SPSR & _BV(SPIF)));
+			printf("\nSent data: %c", sendData[i]);
+			PORTB |= _BV(PB4);
+			_delay_ms(10);
+    	}
     	SPIStatus = RECIEVE_MODE;
-    	PORTB |= _BV(PB4);
     	break;
     case 'R':
-		PORTB &= ~_BV(PB4);
-    	SPDR = 120;
-    	printf("\nRecieved data: %d", SPDR);
-    	SPIStatus = TRANSMIT_MODE;
-    	PORTB |= _BV(PB4);
+    	for(uint8_t i = 0; i < strlen(sendData); i++) {
+			PORTB &= ~_BV(PB4);
+			SPDR = 120;
+			while(!(SPSR & _BV(SPIF)));
+			printf("\nRecieved data: %c", SPDR);
+			PORTB |= _BV(PB4);
+    	}
+		SPIStatus = TRANSMIT_MODE;
     	break;
     }
 }
@@ -63,8 +70,8 @@ int main(void)
     uint8_t i;
 	for(;;) {
         for(i = 0; i < 100; i++) {
-			tx(i);
-			_delay_ms(500);
+			tx("%HelloBOBPants$");
+			_delay_ms(10);
 		}
 	}
 }
