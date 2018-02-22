@@ -19,10 +19,11 @@
 #define RECIEVE_MODE 'R';
 #define TRANSMIT_MODE 'T';
 volatile char SPIStatus = RECIEVE_MODE;
-volatile uint8_t temp;
-
+volatile char buffer[20];
+volatile uint8_t bufferi = 0;
+volatile uint8_t validCommand = 0;
 volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interupt knows which bit to place result in
-    
+
 void init_power_saving(void);
 void init_adc(void);
 void init_spi_slave(void);
@@ -53,14 +54,34 @@ void init_spi_slave(void) { //Atmega is slave to ESP
 ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer
     switch(SPIStatus) {
     case 'T':
-    	SPDR = temp + 1;
-    	printf("\nSent data: %d", temp + 1);
-    	SPIStatus = RECIEVE_MODE;
+		SPDR = buffer[bufferi];
+		printf("\nSent data: %c", buffer[bufferi]);
+		if(buffer[bufferi] == '$') {
+			SPIStatus = RECIEVE_MODE;
+			bufferi = 0;
+		}
+		else
+			bufferi = bufferi + 1;
     	break;
     case 'R':
-    	temp = SPDR;
-    	printf("\nRecieved data: %d", temp);
-    	SPIStatus = TRANSMIT_MODE;
+    	buffer[bufferi] = SPDR;
+		printf("\nRecieved data: %c", buffer[bufferi]);
+		switch(buffer[bufferi]) {
+		case '%':
+			validCommand = 1;
+			bufferi = bufferi + 1;
+			break;
+		case '$':
+			if(validCommand) {
+				SPIStatus = TRANSMIT_MODE;
+				bufferi = 0;
+				validCommand = 0;
+			}
+			break;
+		default:
+			if(validCommand)
+				bufferi = bufferi + 1;
+		}
     	break;
     }
     /*
