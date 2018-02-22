@@ -18,10 +18,10 @@
 
 #define RECIEVE_MODE 'R';
 #define TRANSMIT_MODE 'T';
-volatile char SPIStatus = RECIEVE_MODE;
-volatile char buffer[20];
-volatile uint8_t bufferi = 0;
-volatile uint8_t validCommand = 0;
+volatile char SPIStatus = RECIEVE_MODE; //Tells SPI interrupt which mode to be in, transmission or receive
+volatile char buffer[20]; // Buffer for received data (increase if needed)
+volatile uint8_t bufferi = 0; // Buffer tracker to keep track which bit is currently being editted
+volatile uint8_t validCommand = 0; // Flagged when valid command (%) is seen
 volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interupt knows which bit to place result in
 
 void init_power_saving(void);
@@ -51,35 +51,35 @@ void init_spi_slave(void) { //Atmega is slave to ESP
     sei();//Enable interrupts
 }
 
-ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer
-    switch(SPIStatus) {
-    case 'T':
-		SPDR = buffer[bufferi];
+ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (works by when SPDR is full it creates interrupt flag)
+    switch(SPIStatus) { // Depending on current needed state it switches to that case
+    case 'T': // Transmission case
+		SPDR = buffer[bufferi]; // Places current bit in SPDR register for transmission
 		printf("\nSent data: %c", buffer[bufferi]);
-		if(buffer[bufferi] == '$') {
-			SPIStatus = RECIEVE_MODE;
-			bufferi = 0;
+		if(buffer[bufferi] == '$') { // When current bit is $ it knows this is the end of the transmission
+			SPIStatus = RECIEVE_MODE; // Sets program back to receive mode to wait for new data
+			bufferi = 0; // Resets buffer tracker for next use
 		}
 		else
-			bufferi = bufferi + 1;
+			bufferi = bufferi + 1; // Allows program to send next bit when master sends SCK
     	break;
-    case 'R':
-    	buffer[bufferi] = SPDR;
+    case 'R': // Receive case
+    	buffer[bufferi] = SPDR; // Save received data
 		printf("\nRecieved data: %c", buffer[bufferi]);
-		switch(buffer[bufferi]) {
+		switch(buffer[bufferi]) { // Keeps an eye on the data send to look out for start (%) and end bit ($)
 		case '%':
-			validCommand = 1;
-			bufferi = bufferi + 1;
+			validCommand = 1; // Signals next received bytes are command bits
+			bufferi = bufferi + 1; // Increments buffer counter
 			break;
 		case '$':
-			if(validCommand) {
-				SPIStatus = TRANSMIT_MODE;
+			if(validCommand) { // Checks if start bit has been seen before end bit - Other wise it knows it started to see transmission after it began
+				SPIStatus = TRANSMIT_MODE; // Sets program to transmission mode to replay to master (TODO what if master doesnt want a reply)
 				bufferi = 0;
-				validCommand = 0;
+				validCommand = 0; // Command is over so this is reset
 			}
 			break;
 		default:
-			if(validCommand)
+			if(validCommand) // If bit received is after start bit and isnt end bit it increments buffer counter
 				bufferi = bufferi + 1;
 		}
     	break;

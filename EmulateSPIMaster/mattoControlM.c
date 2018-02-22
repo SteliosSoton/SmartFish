@@ -14,11 +14,6 @@
 #define STANDBY 4
 #define IDLE 0
 
-#define RECIEVE_MODE 'R';
-#define TRANSMIT_MODE 'T';
-volatile char SPIStatus = TRANSMIT_MODE;
-volatile uint8_t temp;
-
 void init_interrupts(void) {
     sei(); 
 }
@@ -37,34 +32,34 @@ void init_spi_master(void) {
 void tx(char *sendData) {
 	uint8_t firstBit = 1;
 	char bufferBit = 0;
-    switch(SPIStatus) {
-    case 'T':
-    	for(uint8_t i = 0; i < strlen(sendData); i++) {
-			PORTB &= ~_BV(PB4);
-			SPDR = sendData[i];
-			while(!(SPSR & _BV(SPIF)));
-			printf("\nSent data: %c", sendData[i]);
-			PORTB |= _BV(PB4);
-			_delay_ms(10);
-    	}
-    	SPIStatus = RECIEVE_MODE;
-    	break;
-    case 'R':
-    	while(!(bufferBit == '$')) {
-			PORTB &= ~_BV(PB4);
-			SPDR = 120;
-			while(!(SPSR & _BV(SPIF)));
-			bufferBit = SPDR;
-			if(firstBit) {
-				bufferBit = '*';
-				firstBit = 0;
-			}
-			printf("\nRecieved data: %c", bufferBit);
-			PORTB |= _BV(PB4);
-    	}
-		SPIStatus = TRANSMIT_MODE;
-    	break;
-    }
+	/* The following code assumes the following:
+	 * The master will send a command then the slave will return some data back. Using the format % is start bit and $ is end bit.
+	 * TODO  certain commands are only a one way communcation so this needs to be accounted for
+	 */
+
+	for(uint8_t i = 0; i < strlen(sendData); i++) { // For the length of the string (command) sending
+		PORTB &= ~_BV(PB4); // set SS pin low for transmission
+		SPDR = sendData[i]; // Set SPI register to nth character of command
+		while(!(SPSR & _BV(SPIF))); // Wait for transmission complete
+		printf("\nSent data: %c", sendData[i]);
+		PORTB |= _BV(PB4); // Set SS pin high again after transmission
+		_delay_ms(10);
+	}
+
+	while(!(bufferBit == '$')) { // Keeps looping until end bit $ is recieved from slave
+		PORTB &= ~_BV(PB4);
+		SPDR = 120; // Dummy data just to start master SCK (SPI clock) which slave uses to send data with
+		while(!(SPSR & _BV(SPIF))); // Wait for transmission (receiving) complete
+		bufferBit = SPDR; // Read SPDR register (which now has received byte from slave or still 120 if slave hasnt sent anything)
+		if(firstBit) { /* From my code there is 1 cycle where slave sends nothing (even if data sent straight away)
+		 	 	 	 	* so $ is still in SPDR which bufferBit will become ending the while loop straight away. This just sets bufferBit to *
+		 	 	 	 	* so it doesnt end loop. */
+			bufferBit = '*';
+			firstBit = 0;
+		}
+		printf("\nRecieved data: %c", bufferBit);
+		PORTB |= _BV(PB4);
+	}
 }
 
 
@@ -78,7 +73,7 @@ int main(void)
 	for(;;) {
         for(i = 0; i < 100; i++) {
 			tx("%HelloBOBPants$");
-			_delay_ms(10);
+			_delay_ms(100);
 		}
 	}
 }
