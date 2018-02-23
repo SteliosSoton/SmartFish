@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AddButtonIcon.png</file>
+        <file>BackButtonIcon.png</file>
+        <file>MusicButtonIcon.jpg</file>
+        <file>SettingsButtonIcon.png</file>
+    </qresource>
+</RCC>

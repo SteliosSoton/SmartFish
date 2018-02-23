@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MusicWindow</class>
+ <widget class="QWidget" name="MusicWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <widget class="QPushButton" name="BackButton">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>91</width>
+     <height>101</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/BackButtonIcon.png</normaloff>:/BackButtonIcon.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>85</width>
+     <height>105</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="Resources/biobloom.qrc"/>
+ </resources>
+ <connections/>
+</ui>
