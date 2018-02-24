@@ -19,7 +19,7 @@
 #define ACT_WAKE		0x0b	// chip wakes up
 #define ACT_RESET		0x0c	// chip reset
 #define ACT_PLAY		0x0d	// resume play back
-#define ACT_PAUSE		0xOe	// play back is paused
+#define ACT_PAUSE		0x0e	// play back is paused
 #define ACT_PLAY_WITH_FF	0x0f	// play the song with the directory /ZZ/YYYxxx.mp3
 #define ACT_STOP		0x16	// stop play back completely
 #define ACT_F_CYCLE_PLAY	0x17	// cycle play through folder XX
