@@ -8,6 +8,15 @@
 #define STANDBY 4
 #define IDLE 0
 
+/* | ------------- Master ------------- |
+*  |	  PD0	     -	     C232 Tx	|
+*  |	  PD1	     -	     C232 Rx	|
+*  |	  PB4	     -	    Slave PB4	|
+*  |	  PB5	     -	    Slave PB5	|
+*  |	  PB6	     -	    Slave PB6	|
+*  |	  PB7	     -	    Slave PB7	|
+*  | ---------------------------------- | */
+
 /* ------------------------------ SPI ------------------------------ */
 void init_interrupts(void) {
     sei();
