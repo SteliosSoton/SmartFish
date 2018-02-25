@@ -9,6 +9,17 @@
 #define IDLE 0
 #define SENSOR_COUNT 2
 
+/* | ------------- Slave -------------- |
+*  |	  PD0	     -	    Audio Tx	|
+*  |	  PD1	     -	    Audio Rx	|
+*  |	  VCC	     -	    Audio VCC	|
+*  |	  GND	     -	    Audio GND	|
+*  |	  PB4	     -	   Master PB4	|
+*  |	  PB5	     -	   Master PB5	|
+*  |	  PB6	     -	   Master PB6	|
+*  |	  PB7	     -	   Master PB7	|
+*  | ---------------------------------- | */
+
 // Actions from data sheet
 #define ACT_NEXT 			0x01	// go to next song
 #define ACT_PREV 			0x02	// go to previous song
