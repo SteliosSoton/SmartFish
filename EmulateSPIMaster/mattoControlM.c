@@ -14,6 +14,23 @@
 #define STANDBY 4
 #define IDLE 0
 
+#define START 0x7e
+#define END 0x7f
+
+#define WATER_PLANT 0x01
+#define REQUEST_SENSOR_DATA 0x02
+
+typedef struct data {
+	char version; //Version slave is on
+	char command; //Command hex code
+	char commandInfoLength; //Length of data sent over command and before end
+	char commandInfo[50]; //Extra command data. E.G main usage is putting sensor data like temp and humidity
+	char feedback; //If data is wanted in return (0 = dont return, 1 = return data)
+}data;
+
+volatile data receive; //Create instances of struct. One for transmit and receive
+volatile data transmit;
+
 void init_interrupts(void) {
     sei(); 
 }
@@ -29,37 +46,51 @@ void init_spi_master(void) {
 	// MSTR - configures SPI as master
 	// SPI2X, SPR0, SPR1 - configure SPI clock frequency (0 1 1 fosc/128)
 }
-void tx(char *sendData) {
-	uint8_t firstBit = 1;
-	char bufferBit = 0;
-	/* The following code assumes the following:
-	 * The master will send a command then the slave will return some data back. Using the format % is start bit and $ is end bit.
-	 * TODO  certain commands are only a one way communcation so this needs to be accounted for
-	 */
 
-	for(uint8_t i = 0; i < strlen(sendData); i++) { // For the length of the string (command) sending
-		PORTB &= ~_BV(PB4); // set SS pin low for transmission
-		SPDR = sendData[i]; // Set SPI register to nth character of command
-		while(!(SPSR & _BV(SPIF))); // Wait for transmission complete
-		printf("\nSent data: %c", sendData[i]);
-		PORTB |= _BV(PB4); // Set SS pin high again after transmission
-		_delay_ms(10);
-	}
+void sendByte(char byte) { //Regular function to send a byte over SPI
+	PORTB &= ~_BV(PB4); //Set SS low
+	SPDR = byte; //Put byte in SPI register
+	while(!(SPSR & _BV(SPIF))); //Wait for transfer complete
+	PORTB |= _BV(PB4); //set SS high
+	_delay_ms(500);
+}
 
-	while(!(bufferBit == '$')) { // Keeps looping until end bit $ is recieved from slave
-		PORTB &= ~_BV(PB4);
-		SPDR = 120; // Dummy data just to start master SCK (SPI clock) which slave uses to send data with
-		while(!(SPSR & _BV(SPIF))); // Wait for transmission (receiving) complete
-		bufferBit = SPDR; // Read SPDR register (which now has received byte from slave or still 120 if slave hasnt sent anything)
-		if(firstBit) { /* From my code there is 1 cycle where slave sends nothing (even if data sent straight away)
-		 	 	 	 	* so $ is still in SPDR which bufferBit will become ending the while loop straight away. This just sets bufferBit to *
-		 	 	 	 	* so it doesnt end loop. */
-			bufferBit = '*';
-			firstBit = 0;
+char receiveByte(void) {
+	PORTB &= ~_BV(PB4); //Set SS low
+	SPDR = 0x01; //Random data to initialize salve to master transfer
+	while(!(SPSR & _BV(SPIF))); //Wait for transfer complete
+	char receivedByte = SPDR; //Read data transfered from slave to master
+	PORTB |= _BV(PB4); //Set SS high
+	_delay_ms(100);
+	return receivedByte; //Return read byte
+}
+void receiveData(void) {
+	char loopTerminator = 0x00;
+	while(!(loopTerminator == END)) {
+		if(receiveByte() == START)	{ //Only record data once start byte has been seen
+			receive.version = receiveByte();
+			receive.command = receiveByte();
+			receive.commandInfoLength = receiveByte();
+			for(uint8_t i = 0; i < (receive.commandInfoLength); i++) //Loop for amount of times slave said it would transfer commandinfo data
+				receive.commandInfo[i] = receiveByte();
+			receive.feedback = receiveByte();
+			loopTerminator = END;
 		}
-		printf("\nRecieved data: %c", bufferBit);
-		PORTB |= _BV(PB4);
 	}
+}
+
+void sendData(data sendData) {
+	sendByte(START);
+	sendByte(sendData.version);
+	sendByte(sendData.command);
+	sendByte(sendData.commandInfoLength);
+	for(uint8_t i = 0; i < sendData.commandInfoLength; i++)
+		sendByte(sendData.commandInfo[i]);
+	sendByte(sendData.feedback);
+	sendByte(END);
+
+	if(sendData.feedback) //If feedback was selected the master will now wait for said data
+		receiveData();
 }
 
 
@@ -69,11 +100,33 @@ int main(void)
 	init_debug_uart0();	// initialise UART debug
     init_interrupts();
     
-    uint8_t i;
-	for(;;) {
-        for(i = 0; i < 100; i++) {
-			tx("%HelloBOBPants$");
-			_delay_ms(100);
-		}
+    for(;;) {
+
+		transmit.version = 0x01; //Set transmission data
+		transmit.command = WATER_PLANT;
+		transmit.commandInfoLength = 0x00;
+		transmit.feedback = 0x00;
+		sendData(transmit);
+
+		_delay_ms(1000);
+
+		transmit.version = 0x01;
+		transmit.command = REQUEST_SENSOR_DATA;
+		transmit.commandInfoLength = 0x03;
+		transmit.commandInfo[0] = 0x01;
+		transmit.commandInfo[1] = 0x01;
+		transmit.commandInfo[2] = 0x01;
+		transmit.feedback = 0x01;
+		sendData(transmit);
+
+		printf("\nreceive.version: %x", receive.version); //Print received data collected by sendData as feedback was set to 1 in previous transmission
+		printf("\nreceive.command: %x", receive.command);
+		printf("\nreceive.commandInfoLength: %x", receive.commandInfoLength);
+		for(uint8_t i = 0; i < (receive.commandInfoLength); i++)
+			printf("\nreceive.commandInfo: %x", receive.commandInfo[i]);
+		printf("\nreceive.feedback: %x", receive.feedback);
+
+		_delay_ms(1000);
+
 	}
 }
