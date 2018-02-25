@@ -20,16 +20,16 @@
 #define WATER_PLANT 0x01
 #define REQUEST_SENSOR_DATA 0x02
 
-typedef struct data {
-	char version; //Version slave is on
+typedef struct data { //Create new type for holding transmission data
+	char version; //Version of device sending the data
 	char command; //Command hex code
 	char commandInfoLength; //Length of data sent over command and before end
-	char commandInfo[50]; //Extra command data. E.G main usage is putting sensor data like temp and humidity
-	char feedback; //If data is wanted in return (0 = dont return, 1 = return data)
-}data;
+	char commandInfo[50]; //Buffer for command info
+	char feedback; //If sender wants data in return
+}data; //Call this new type of variable 'data'
 
-volatile data receive; //Create instances of struct. One for transmit and receive
-volatile data transmit;
+volatile data receive; //Create new instance of data for receive transmissions
+volatile data transmit; //transmit transmissions
 
 void init_interrupts(void) {
     sei(); 

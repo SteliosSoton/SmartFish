@@ -26,16 +26,16 @@ volatile char SPIStatus = RECEIVE_MODE; //Tells SPI interrupt which mode to be i
 void init_spi_slave(void);
 uint8_t getRequestedData(char request);
 
-typedef struct data {
-	char version; //Version slave is on
+typedef struct data { //Create new type for holding transmission data
+	char version; //Version of device sending the data
 	char command; //Command hex code
 	char commandInfoLength; //Length of data sent over command and before end
 	char commandInfo[50]; //Buffer for command info
-	char feedback; //If master wants data in return
-}data;
+	char feedback; //If sender wants data in return
+}data; //Call this new type of variable 'data'
 
-volatile data receive;
-volatile data transmit;
+volatile data receive; //Create new instance of data for receive transmissions
+volatile data transmit; //transmit transmissions
 
 
 void init_spi_slave(void) { //Atmega is slave to ESP
