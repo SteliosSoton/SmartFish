@@ -8,6 +8,8 @@
 #include "power_saving.h"
 #include "SPI_slave.h"
 #include "external_interrupt.h"
+#include "UART.h"
+#include "interpretSPI.h"
 
 int main(void)
 {
@@ -18,7 +20,9 @@ int main(void)
 
 	init_debug_uart0();
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-	printf("\nUART debug init complete");
+	printf("\nUART0 debug init complete");
+	init_uart1();	// initialise UART for Audio module
+	printf("\nUART1 init for audio module complete");
     init_adc();
     printf("\nADC init complete");
     init_power_saving();

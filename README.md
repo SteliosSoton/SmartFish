@@ -75,4 +75,3 @@ PIND2 : (Sound) External Interrupt0 Input / USART1 Receive Pin
 PIND1 : (Debug) USART0 Transmit Pin
 
 PIND0 : (Debug) USART0 Receive Pin
-

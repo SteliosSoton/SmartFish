@@ -17,8 +17,9 @@
 #define START 0x7e
 #define END 0x7f
 
-#define WATER_PLANT 0x01
-#define REQUEST_SENSOR_DATA 0x02
+#define WATER_PLANT 0x01			// header tags for data sent in "command"
+#define REQUEST_SENSOR_DATA 0x02	// actually hex data/command sent in "commadInfo"
+#define AUDIO 0x03
 
 typedef struct data { //Create new type for holding transmission data
 	char version; //Version of device sending the data
@@ -52,7 +53,7 @@ void sendByte(char byte) { //Regular function to send a byte over SPI
 	SPDR = byte; //Put byte in SPI register
 	while(!(SPSR & _BV(SPIF))); //Wait for transfer complete
 	PORTB |= _BV(PB4); //set SS high
-	_delay_ms(500);
+	_delay_ms(100);
 }
 
 char receiveByte(void) {
@@ -93,6 +94,27 @@ void sendData(data sendData) {
 		receiveData();
 }
 
+// UART in/out control
+char get_ch(void)
+{
+	while(!(UCSR0A & _BV(RXC0)));
+	return UDR0;
+}
+
+void put_ch(char ch)
+{
+	while (!(UCSR0A & _BV(UDRE0)));
+	UDR0 = ch;
+}
+
+void put_str(char *str)
+{
+	int i;
+	for(i=0; str[i]; i++) put_ch(str[i]);
+}
+
+// END UART input control
+
 
 int main(void)
 {
@@ -100,16 +122,157 @@ int main(void)
 	init_debug_uart0();	// initialise UART debug
     init_interrupts();
     
-    for(;;) {
+    char ch;
 
-		transmit.version = 0x01; //Set transmission data
-		transmit.command = WATER_PLANT;
-		transmit.commandInfoLength = 0x00;
-		transmit.feedback = 0x00;
-		sendData(transmit);
+    for (;;)
+    {
+        	/* get character from UART */
+        	ch = get_ch();
+        	/* send message back to the host terminal */
+        	put_str("You sent the character '");
+            _delay_ms(10);
 
-		_delay_ms(1000);
+        	put_ch(ch);	// UART out
+        	put_str("'.\n\r");
+            _delay_ms(10);
 
+            switch(ch){
+            case '1':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x22;
+            	transmit.commandInfo[1] = 0x1E;
+            	transmit.commandInfo[2] = 0x01;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '2':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x22;
+            	transmit.commandInfo[1] = 0x1E;
+            	transmit.commandInfo[2] = 0x02;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '3':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x22;
+            	transmit.commandInfo[1] = 0x1E;
+            	transmit.commandInfo[2] = 0x03;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '4':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x22;
+            	transmit.commandInfo[1] = 0x1E;
+            	transmit.commandInfo[2] = 0x04;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case 'p':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x0E;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case 'r':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x0D;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '+':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x04;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '-':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x05;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '<':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x02;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case '>':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x01;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case 's':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x16;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case 'z':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x0A;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            case 'w':
+            	transmit.version = 0x01;
+            	transmit.command = AUDIO;
+            	transmit.commandInfoLength = 0x03;
+            	transmit.commandInfo[0] = 0x0B;
+            	transmit.commandInfo[1] = 0x00;
+            	transmit.commandInfo[2] = 0x00;
+            	transmit.feedback = 0x00;
+            	sendData(transmit);
+            	break;
+            default:
+            	put_str("\nThat input does not match a command (switch defaulted)\n[1 2 3 4 p r + - < > s z w]\n\r");
+            	break;
+            }
+
+		/* E.G of Send + Feedback
 		transmit.version = 0x01;
 		transmit.command = REQUEST_SENSOR_DATA;
 		transmit.commandInfoLength = 0x03;
@@ -127,6 +290,7 @@ int main(void)
 		printf("\nreceive.feedback: %x", receive.feedback);
 
 		_delay_ms(1000);
+		*/
 
 	}
 }

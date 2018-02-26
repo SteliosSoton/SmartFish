@@ -18,19 +18,19 @@
 *  | ---------------------------------- | */
 
 /* | ------------ Commands ------------ |
-*  |	  1	     -	  play track 1	|
-*  |	  2	     -	  play track 2	|
-*  |	  3	     -	  play track 3	|
-*  |	  4	     -	  play track 4	|
-*  |	  p	     -	    pause	|
-*  |	  r	     -	    resume	|
-*  |	  +	     -	 increment vol	|
-*  |	  -	     -	 decrement vol	|
-*  |	  <	     -	 previous song	|
-*  |	  >	     -	   next song	|
-*  |	  s	     -	     stop	|
-*  |	  z	     -	    sleep	|
-*  |	  w	     -	     wake	|
+*  |	  1	     -	  play track 1	    |
+*  |	  2	     -	  play track 2	    |
+*  |	  3	     -	  play track 3	    |
+*  |	  4	     -	  play track 4	    |
+*  |	  p	     -	    pause	        |
+*  |	  r	     -	    resume	        |
+*  |	  +	     -	 increment vol	    |
+*  |	  -	     -	 decrement vol	    |
+*  |	  <	     -	 previous song	    |
+*  |	  >	     -	   next song	    |
+*  |	  s	     -	     stop	        |
+*  |	  z	     -	    sleep	        |
+*  |	  w	     -	     wake	        |
 *  | ---------------------------------- | */
 
 /* ------------------------------ SPI ------------------------------ */
