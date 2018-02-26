@@ -5,8 +5,8 @@
  *      Author: mp7g16
  */
 
-#ifndef UART_H_
-#define UART_H_
+#ifndef UART_AUDIO_MODULE_H_
+#define UART_AUDIO_MODULE_H_
 
 volatile UARTdata TxData;
 
@@ -74,4 +74,4 @@ void sendCommand(char action, char data1, char data2){
 }
 
 
-#endif /* UART_H_ */
+#endif /* UART_AUDIO_MODULE_H_ */

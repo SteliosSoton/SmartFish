@@ -8,6 +8,8 @@
 #ifndef INTERPRETSPI_H_
 #define INTERPRETSPI_H_
 
+#include "UART_audio_module.h"
+
 void testReceived(SPIdata received){
     	// Check command to see what to do (where to send the "commandInfo")
     	switch(received.command){

@@ -12,8 +12,8 @@
 #include <avr/interrupt.h>
 #include "debug.h"
 #include "dataStruct.h"
-#include "UART.h"
 #include "interpretSPI.h"
+#include "UART_audio_module.h"
 
 #define RECEIVE_MODE 'R'
 #define TRANSMIT_MODE 'T'

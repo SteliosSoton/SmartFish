@@ -9,8 +9,8 @@
 #include "SPI_slave.h"
 #include "external_interrupt.h"
 #include "ADC_UART_testing.h" //Comment out when not needed
-#include "UART.h"
 #include "interpretSPI.h"
+#include "UART_audio_module.h"
 
 int main(void)
 {
@@ -22,7 +22,7 @@ int main(void)
 	init_debug_uart0();
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	printf("\nUART0 debug init complete");
-	init_uart1();	// initialise UART for Audio module
+	init_uart1();	// initialize UART for Audio module
 	printf("\nUART1 init for audio module complete");
     init_adc();
     printf("\nADC init complete");
