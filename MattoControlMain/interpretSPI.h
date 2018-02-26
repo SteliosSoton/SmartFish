@@ -9,19 +9,24 @@
 #define INTERPRETSPI_H_
 
 #include "UART_audio_module.h"
+#include "pump_control.h"
+
+#define WATER_PLANT 0x01
+#define REQUEST_SENSOR_DATA 0x02
+#define AUDIO 0x03
 
 void testReceived(SPIdata received){
     	// Check command to see what to do (where to send the "commandInfo")
     	switch(received.command){
-    	case 0x01:	// water plant
+    	case WATER_PLANT:	// water plant
     		printf("\nWatering Plant...");
-    		//water_plant();
+    		toggleplant(received.commandInfo[0]);
     		break;
-    	case 0x02:	// request data
+    	case REQUEST_SENSOR_DATA:	// request data
     		printf("\nGetting ADC data...");
     		//getADCdata();
     		break;
-    	case 0x03:	// audio
+    	case AUDIO:	// audio
     		sendCommand(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
     		break;
     	}
