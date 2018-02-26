@@ -57,8 +57,7 @@ void getADCData(void)
 
 void displayResults(void) //Will be used for transmission of data when needed
 {
-    uint8_t i;
-    for(i = 0; i < SENSOR_COUNT; i++) {
+    for(uint8_t i = 0; i < SENSOR_COUNT; i++) {
     	switch((char)i) {
     	case 0:
     		printf("\nBattery voltage: %.2f", getBatteryLevel(ADCResults[i + 1]));
