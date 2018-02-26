@@ -56,7 +56,7 @@ PINC2 : (-) JTAG Test Clock
 
 PINC1 : (-) 2-wire Serial Bus Data Input/Output Line
 
-PINC0 : (-) 2-wire Serial Bus Clock Line
+PINC0 : (pump) 2-wire Serial Bus Clock Line
 
 PORTD
 
