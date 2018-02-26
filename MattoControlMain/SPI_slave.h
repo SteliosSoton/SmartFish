@@ -21,10 +21,6 @@
 #define START 0x7e
 #define END 0x7f
 
-#define WATER_PLANT 0x01			// header tags for data sent in "command"
-#define REQUEST_SENSOR_DATA 0x02	// actually hex data/command sent in "commadInfo"
-#define AUDIO 0x03
-
 volatile char SPIStatus = RECEIVE_MODE; //Tells SPI interrupt which mode to be in, transmission or receive
 
 void init_spi_slave(void);
@@ -161,7 +157,6 @@ ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (w
 
     break;
     }
-
 }
 
 #endif /* SPI_SLAVE_H_ */
