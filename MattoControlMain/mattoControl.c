@@ -8,6 +8,7 @@
 #include "power_saving.h"
 #include "SPI_slave.h"
 #include "external_interrupt.h"
+#include "ADC_UART_testing.h" //Comment out when not needed
 
 int main(void)
 {
@@ -26,7 +27,8 @@ int main(void)
     init_spi_slave();
     printf("\nSPI slave enabled");
     init_external_interrupts();
-    printf("\nInt0 enabled for ADC conversions testing");
+    printf("\nInt0 enabled");
+    printf("\nADC_UART_testing included: type any char to active all channels ADC.");
     _delay_ms(1); //Device enters sleep too fast for UART to send data 
     
 	while(1) { enterSleepMode(IDLE); //Keep device in IDLE while waiting for SPI transfer complete interrupt
