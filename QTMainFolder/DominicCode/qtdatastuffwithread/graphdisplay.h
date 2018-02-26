@@ -14,7 +14,9 @@ class graphDisplay : public QWidget
     Q_OBJECT
 
 public:
-    explicit graphDisplay(QString graphType, QWidget *parent = 0);
+    graphDisplay(QString graphType, QWidget *parent = 0);
+    graphDisplay(QString graphType, int ideal, QWidget *parent = 0);
+
     ~graphDisplay();
     void addPoint(QDateTime dataNumber, int dataValue);//int dataNumber
     void setIdeal(float ideal);
