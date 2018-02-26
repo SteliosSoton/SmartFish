@@ -13,6 +13,7 @@
 #include "debug.h"
 #include <util/delay.h>
 #include "power_saving.h"
+#include "battery_level_indicator.h"
 
 #define SENSOR_COUNT 2
 
@@ -57,7 +58,13 @@ void getADCData(void)
 void displayResults(void) //Will be used for transmission of data when needed
 {
     uint8_t i;
-    for(i = 0; i < SENSOR_COUNT; i++) {    printf("\nchannel %d: %4d", i, ADCResults[i + 1]); }
+    for(i = 0; i < SENSOR_COUNT; i++) {
+    	switch((char)i) {
+    	case 0:
+    		printf("\nBattery voltage: %.2f", getBatteryLevel(ADCResults[i + 1]));
+    	}
+    	printf("\nChannel %d: %4d", i, ADCResults[i + 1]);
+    }
 
 }
 

@@ -1,5 +1,5 @@
 /*  Author: Steve Gunn
- *  Edited by NRS1G15 to include header guards
+ *  Edited by NRS1G15 to include header guards and RX interrupt
  *
  * Licence: This work is licensed under the Creative Commons Attribution License.
  *          View this license at http://creativecommons.org/about/licenses/
@@ -15,6 +15,7 @@
 #include <assert.h>
 #include <stdio.h>
 #include <avr/io.h>
+#include <avr/interrupt.h>
 
 #define DEBUG_BAUD  9600
 
@@ -37,7 +38,8 @@ void init_debug_uart0(void)
 	/* Configure UART0 baud rate, one start bit, 8-bit, no parity and one stop bit */
 	UBRR0H = (F_CPU/(DEBUG_BAUD*16L)-1) >> 8;
 	UBRR0L = (F_CPU/(DEBUG_BAUD*16L)-1);
-	UCSR0B = _BV(RXEN0) | _BV(TXEN0);
+	UCSR0B = _BV(RXEN0) | _BV(TXEN0) | _BV(RXCIE0); // RXCIE0 enables RX interrupt
+	sei();
 	UCSR0C = _BV(UCSZ00) | _BV(UCSZ01);
 
 	/* Setup new streams for input and output */

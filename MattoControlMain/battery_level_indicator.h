@@ -8,9 +8,12 @@
 #ifndef BATTERY_LEVEL_INDICATOR_H_
 #define BATTERY_LEVEL_INDICATOR_H_
 
-uint16_t getBatteryLevel(uint16_t ADCData)
+double getBatteryLevel(uint16_t ADCData)
 {
-        return (((ADCData*3.3)/1024)/(120207/(389728 + 120207))); //Convert ADC hex to voltage then potential divider network of measured resistances
+	double ADCV = (ADCData*3.3)/1024;
+	double dividerNetwork = 120217.0 /(389735 + 120217);
+	return ADCV/dividerNetwork; //Convert ADC hex to voltage then potential divider network of measured resistances
 }
 
 #endif /* BATTERY_LEVEL_INDICATOR_H_ */
+//0.2357
