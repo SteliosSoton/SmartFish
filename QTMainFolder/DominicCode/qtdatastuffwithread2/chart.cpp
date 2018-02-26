@@ -35,6 +35,7 @@
 
 Chart::Chart(QString desiredType)
    {
+    idealValue=10000;
     graphType=desiredType;
     axisY = new QValueAxis;
     axisX = new QDateTimeAxis;
@@ -68,7 +69,7 @@ Chart::Chart(QString desiredType)
     printf("added series");
     idealSeries->attachAxis(axisX);
     idealSeries->attachAxis(axisY);
-    //change title and y axis depending on the ata being displayed
+    //change title and y axis depending on the data being displayed
     if(graphType=="temperature")
         {
             setTitle("Temperature Over Time");
@@ -76,6 +77,7 @@ Chart::Chart(QString desiredType)
             axisY->setRange(0, 100);
 
         }
+
 
 }
 
@@ -86,8 +88,10 @@ void Chart::addPoint(qint64 dataNumber, int dataValue)//this adds a point to the
 
 
     printf("%d", data_series->pointsVector().first().x());
+    if(idealValue!=100000){
     idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);   //data_series->pointsVector().first().x(), idealValue);
     idealSeries->append(data_series->pointsVector().last().x(), idealValue);
+    }
     axisX->setMax(QDateTime().currentDateTime());
     /*setYmax();
     printf("finishedYmax");
@@ -116,9 +120,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Time received");
         axisX->setFormat("hh:mm");
         axisX->setTickCount(5);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
-
+    }
 
 
     }
@@ -128,8 +133,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Date received");
         axisX->setFormat("ddd:hh:mm");
         axisX->setTickCount(3);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
+        }
 
 
 
@@ -141,8 +148,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Time received");
         axisX->setFormat("ddd:hh:mm");
         axisX->setTickCount(5);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
+        }
     }
 
 

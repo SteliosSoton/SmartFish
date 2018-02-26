@@ -51,7 +51,7 @@ int main(int argc, char *argv[])
     while (i<10) {//create test values over 5seconds
         printf("in while loop\n");
         Sleep(500);
-        graphView->addPoint(QDateTime().currentDateTime(), (rand()%1000));
+        graphView->addPoint(QDateTime().currentDateTime().toMSecsSinceEpoch(), (rand()%1000));
         printf("appended value \n");
 
         i++;

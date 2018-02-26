@@ -15,8 +15,10 @@ class graphDisplay : public QWidget
 
 public:
     explicit graphDisplay(QString graphType, QWidget *parent = 0);
+    explicit graphDisplay(QString graphType, int ideal, QWidget *parent = 0);
+    void extractData();
     ~graphDisplay();
-    void addPoint(QDateTime dataNumber, int dataValue);//int dataNumber
+    void addPoint(qint64 dataNumber, int dataValue);//int dataNumber
     void setIdeal(float ideal);
 
 private:

@@ -35,6 +35,7 @@
 
 Chart::Chart(QString desiredType)
    {
+    idealValue=100000;// if the ideal value deoesn't change from this it won't be displayed
     graphType=desiredType;
     axisY = new QValueAxis;
     axisX = new QDateTimeAxis;
@@ -85,8 +86,10 @@ void Chart::addPoint(QDateTime dataNumber, int dataValue)//this adds a point to 
     data_series->append(dataNumber.toMSecsSinceEpoch(), dataValue/10);
 
     printf("%d", data_series->pointsVector().first().x());
+    if(idealValue!=100000){
     idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);   //data_series->pointsVector().first().x(), idealValue);
     idealSeries->append(data_series->pointsVector().last().x(), idealValue);
+    }
     axisX->setMax(QDateTime().currentDateTime());
     /*setYmax();
     printf("finishedYmax");
@@ -115,9 +118,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Time received");
         axisX->setFormat("hh:mm");
         axisX->setTickCount(5);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
-
+    }
 
 
     }
@@ -127,9 +131,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Date received");
         axisX->setFormat("ddd:hh:mm");
         axisX->setTickCount(3);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
-
+        }
 
 
     }
@@ -140,8 +145,10 @@ void Chart::rangeSignal(QString desiredstart) //change the range being viewed ap
         axisX->setTitleText("Time received");
         axisX->setFormat("ddd:hh:mm");
         axisX->setTickCount(5);
+        if(idealValue!=100000){
         idealSeries->remove(idealSeries->pointsVector().first().x(), idealValue);
         idealSeries->append(axisX->min().toMSecsSinceEpoch(), idealValue);
+        }
     }
 
 
