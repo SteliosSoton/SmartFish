@@ -2,7 +2,7 @@
  * ADC_UART_testing.h
  *
  *  Created on: Feb 26, 2018
- *      Author: Sil
+ *      Author: NRS1G15
  */
 
 #ifndef ADC_UART_TESTING_H_
