@@ -20,8 +20,8 @@ void enterSleepMode(uint8_t m);
 
 void init_power_saving(void)
 {
-    power_timer0_disable();
-    power_timer1_disable();
+    //power_timer0_disable();
+    //power_timer1_disable();
     power_twi_disable();
 }
 

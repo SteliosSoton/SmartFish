@@ -20,15 +20,9 @@
 ISR(USART0_RX_vect) {
 	printf("\nReceived: %c", UDR0);
 
-	ADCResults[0] = 0; //Reset ADCResalt counter bit
-	ADMUX = 0xc0; //Reset ADC channel back to 0
-	ADCSRA |= _BV(ADEN); //Enable ADC for conversion
-	while(ADCResults[0] < SENSOR_COUNT) { //Repeat loop to keep IC in IDLE while conversion is done
-		enterSleepMode(IDLE);
-	}
-	ADCSRA &= ~_BV(ADEN); //Disable ADC as no longer needed
-
-	displayResults();
+	uint16_t *sensorData = getSensorData(); //Gets a pointer that points to the memory where the sensor data array is stored
+	for(uint8_t i = 0; i < sizeof(sensorData)/sizeof(sensorData[0]); i++) //Gets size of array by taking size of the overall array divided by size of the type of data enclosed.
+		printf("\nSensorData %d: %d", i, sensorData[i]);
 	_delay_ms(2); //Device enters sleep too fast for UART to send data
 }
 

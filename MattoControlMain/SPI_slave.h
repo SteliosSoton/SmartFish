@@ -42,9 +42,11 @@ uint8_t getRequestedData(char request) { //Gets the data requested by ESP comman
 	case REQUEST_SENSOR_DATA: //request identified as REQUEST_SENSOR_DATA
 		transmit.version = 0x01;
 		transmit.command = REQUEST_SENSOR_DATA; //send back command to master to ensure request was correctly identified
-		transmit.commandInfoLength = 0x02;
-		transmit.commandInfo[0] = 0x0f;
-		transmit.commandInfo[1] = 0x01;
+		transmit.commandInfoLength = 0x04;
+		transmit.commandInfo[0] = 0x0f; //To be replaced with temperature getTemperature
+		transmit.commandInfo[1] = 0x01; //To be replaced with humidity getHumidity
+		transmit.commandInfo[2] = 0x01; //To be replaced with light levels getLightLevel
+		transmit.commandInfo[3] = 0x01; //To be replaced with water levels getWaterLevel
 		transmit.feedback = 0x00;
 
 		dataRequestComplete = 1; //Successful data request so return value set to 1

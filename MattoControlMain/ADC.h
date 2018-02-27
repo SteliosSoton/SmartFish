@@ -13,15 +13,17 @@
 #include "debug.h"
 #include <util/delay.h>
 #include "power_saving.h"
-#include "battery_level_indicator.h"
+#include "sensors.h"
+#include <stdio.h>
+#include <stdlib.h>
 
 #define SENSOR_COUNT 2
 
-volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interupt knows which bit to place result in
-
 void init_adc(void);
-void getADCData(void);
-void displayResults(void);
+uint16_t *getSensorData(void);
+uint16_t *getSensorConvertedData(void);
+
+volatile uint16_t ADCResults[SENSOR_COUNT]; //array for holding adc conversion outputs. First bit used as a counter so interrupt knows which bit to place result in
 
 void init_adc(void)
 {
@@ -41,7 +43,7 @@ ISR(ADC_vect) //interrupt handler for completed adc conversion
     ADCSRA |= _BV(ADSC); //Enable ADC for another conversion
 }
 
-void getADCData(void)
+uint16_t *getSensorData(void)
 {
     ADCResults[0] = 0; //Reset ADCResalt counter bit
     ADMUX = 0xc0; //Reset ADC channel back to 0
@@ -51,20 +53,33 @@ void getADCData(void)
     }
     ADCSRA &= ~_BV(ADEN); //Ensure ADC is disabled by clearing by manually
 
-    displayResults();
     _delay_ms(2); //Device enters sleep too fast for UART to send data
+    return getSensorConvertedData();
 }
 
-void displayResults(void) //Will be used for transmission of data when needed
+uint16_t *getSensorConvertedData(void)
 {
+	static uint16_t *sensorData = 0; //Static so only created once and not a new instance each time...thats a memory leak!
+	if(sensorData == 0) //if sensor data is empty aka first time initialized
+		sensorData = malloc(SENSOR_COUNT); //Creates memory space size of sensor count. This memory is used as an array to store the sensor data.
     for(uint8_t i = 0; i < SENSOR_COUNT; i++) {
-    	switch((char)i) {
+    	switch(i) {
     	case 0:
-    		printf("\nBattery voltage: %.2f", getBatteryLevel(ADCResults[i + 1]));
+    		sensorData[0] = getBatteryLevel(ADCResults[i + 1]); //Battery level sensor assumed to be on ADC channel 0
+    		printf("\nBattery level: %d", sensorData[0]);
+    		break;
+    	case 1:
+    		sensorData[1] = getTemperature(ADCResults[i + 2]); //Temperature sensor assumed to be on ADC channel 1
+    		printf("\nBattery level: %d", sensorData[1]);
+    		break;
+    	case 2:
+    		sensorData[2] = getLDRpercentage(ADCResults[i + 3]); //Temperature sensor assumed to be on ADC channel 1
+    		printf("\nBattery level: %d", sensorData[2]);
+    		break;
     	}
     	printf("\nChannel %d: %4d", i, ADCResults[i + 1]);
     }
-
+    return sensorData;
 }
 
 #endif /* ADC_H_ */

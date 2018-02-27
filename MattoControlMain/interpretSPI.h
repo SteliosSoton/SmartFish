@@ -20,7 +20,7 @@ void testReceived(SPIdata received){
     	switch(received.command){
     	case WATER_PLANT:	// water plant
     		printf("\nWatering Plant...");
-    		toggleplant(received.commandInfo[0]);
+    		togglePump(received.commandInfo[0]);
     		break;
     	case REQUEST_SENSOR_DATA:	// request data
     		printf("\nGetting ADC data...");
