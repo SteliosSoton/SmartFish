@@ -14,16 +14,22 @@ volatile uint16_t humidityResults[HUMIDITY_SENSORS +1]; /*array for holding humi
 														knows which bit to place result in*/
 double getBatteryLevel(uint16_t ADCData)
 {
+	printf("Battery: %d\n",ADCData);
 	double ADCV = (ADCData*3.3)/1024;
 	double dividerNetwork = 120217.0 /(389735 + 120217);
     double percentage = 18.182 * (ADCV/dividerNetwork) - 118.18;
+    // percentage 0% = 6.5V as this is when the regulator stops working properly
     if(percentage > 100)
     	return 100;
+    else if(percentage < 0)
+    	return 0;
     else
     	return percentage; //Convert ADC hex to voltage then potential divider network of measured resistances
 }
 
 uint8_t getLDRpercentage(uint16_t ADCValue){
+
+	printf("Light: %d\n",ADCValue);
 
 	double voltage = ADCValue*3.3/1024; /*Convert to voltage*/
 
@@ -33,6 +39,7 @@ uint8_t getLDRpercentage(uint16_t ADCValue){
 }
 
 uint16_t getTemperature(uint16_t ADCValue) {
+	printf("Temp: %d\n",ADCValue);
 	double voltage = ADCValue*3.3/1024; /*Convert to voltage*/
 
 	return voltage*100 - 273; /*Temperature formula, accurate enough.. */ //????? how does this work -Magic!

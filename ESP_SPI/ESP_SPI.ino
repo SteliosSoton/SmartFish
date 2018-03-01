@@ -143,7 +143,7 @@ void readADCData()
 }
 
 void doSomethingWithADCData(){
-  double batteryData = (ADCdata[1] / 10.0);   // convert back to correct format
+  int batteryData = ADCdata[1];   // convert back to correct format
   int lightData = ADCdata[2];                 // convert light format
   int humidityData = ADCdata[3];              // convert humidity format
   int data1 = ADCdata[4];                     // 50 = ok, 100 = error
@@ -173,9 +173,9 @@ void doSomethingWithADCData(){
   
   Serial.print("Battery: ");
   Serial.println(batteryData);
-  Serial.print("Light: ");
+  Serial.print("Temp: ");
   Serial.println(lightData);
-  Serial.print("Humidity: ");
+  Serial.print("Light: ");
   Serial.println(humidityData);
   Serial.print("Data: ");
   Serial.println(data1);
@@ -278,10 +278,10 @@ void setup() {
   //START WIFI, CONNECT TO HUB
   WiFi.hostname(mac_address_string);
   WiFi.begin(ssid, password);
-  while(WiFi.status()!= WL_CONNECTED){
-    delay(500);
-    Serial.print(".");
-  }
+  //while(WiFi.status()!= WL_CONNECTED){
+  //  delay(500);
+  //  Serial.print(".");
+  //}
    ip = WiFi.localIP();
   Serial.println(ip);
   

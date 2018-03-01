@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SENSOR_COUNT 2
+#define SENSOR_COUNT 3
 
 void init_adc(void);
 uint16_t *getSensorData(void);
@@ -66,18 +66,18 @@ uint16_t *getSensorConvertedData(void)
     	switch(i) {
     	case 0:
     		sensorData[0] = getBatteryLevel(ADCResults[i + 1]); //Battery level sensor assumed to be on ADC channel 0
-    		printf("\nBattery level: %d", sensorData[0]);
+    		//printf("\nBattery level: %d", sensorData[0]);
     		break;
     	case 1:
     		sensorData[1] = getTemperature(ADCResults[i + 2]); //Temperature sensor assumed to be on ADC channel 1
-    		printf("\nBattery level: %d", sensorData[1]);
+    		//printf("\nTemperature level: %d", sensorData[1]);
     		break;
     	case 2:
     		sensorData[2] = getLDRpercentage(ADCResults[i + 3]); //Temperature sensor assumed to be on ADC channel 1
-    		printf("\nBattery level: %d", sensorData[2]);
+    		//printf("\nLight level: %d", sensorData[2]);
     		break;
     	}
-    	printf("\nChannel %d: %4d", i, ADCResults[i + 1]);
+    	//printf("\nChannel %d: %4d", i, ADCResults[i + 1]);
     }
     return sensorData;
 }
