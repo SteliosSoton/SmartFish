@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SENSOR_COUNT 3
+#define SENSOR_COUNT 4
 
 void init_adc(void);
 uint16_t *getSensorData(void);
@@ -80,6 +80,10 @@ uint16_t *getSensorConvertedData(void)
     		sensorData[i] = getHumidityPercentage();
     		printf("\nHumidity Percentage\t: \t%u%%", sensorData[i]);
     		break;
+	case 4:
+		sensorData[i] = getWaterLevel(ADCResults[i]);
+		printf("\nWater Level\t: \t%d%%", sensorData[i]);
+		break;
     	}
     	printf("\nChannel %d \t:\t%4d", i, ADCResults[i + 1]);
     }
