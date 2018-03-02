@@ -25,10 +25,13 @@ void init_RGB_LEDs(void) {
 }
 
 void toggleLED(char led, uint8_t status) {
-	if(status)
+	
+	PINC ^= _BV(led);
+/*	if(status)
 		PORTC &= ~_BV(led);
 	else
 		PORTC &= ~_BV(led);
+*/
 }
 void setRGBColour(uint8_t red, uint8_t green, uint8_t blue) {
 	toggleLED(REDLED, red);
