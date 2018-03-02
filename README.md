@@ -14,13 +14,13 @@ PINA5 : (-) ADC Sensor Input
 
 PINA4 : (-) ADC Sensor Input
 
-PINA3 : (-) ADC Sensor Input
+PINA3 : (WaterLevel) ADC Sensor Input
 
-PINA2 : (-) ADC Sensor Input
+PINA2 : (Light) ADC Sensor Input
 
-PINA1 : (-) ADC Sensor Input
+PINA1 : (Temperature) ADC Sensor Input
 
-PINA0 : (-) ADC Sensor Input
+PINA0 : (Battery) ADC Sensor Input
 
 PORTB
 
@@ -36,7 +36,7 @@ PINB3 : (-) Analog Comparator Negative Input / Timer/Counter 0 Output Compare Ma
 
 PINB2 : (Comms) Analog Comparator Positive Input / External Interrupt 2 Input
 
-PINB1 : (-) Timer/Counter 1 External Counter Input / Divided System Clock Output
+PINB1 : (MoistIn) Timer/Counter 1 External Counter Input / Divided System Clock Output
 
 PINB0 : (Debug) Timer/Counter 0 External Counter Input / USART0 External Clock Input/Output
 
@@ -44,7 +44,7 @@ PORTC
 
 PINC7 : (-) Timer Oscillator pin 2
 
-PINC6 : (-) Timer Oscillator pin 1
+PINC6 : (Pump) Timer Oscillator pin 1
 
 PINC5 : (-) JTAG Test Data Input
 
@@ -56,7 +56,7 @@ PINC2 : (-) JTAG Test Clock
 
 PINC1 : (-) 2-wire Serial Bus Data Input/Output Line
 
-PINC0 : (pump) 2-wire Serial Bus Clock Line
+PINC0 : (MoistOut1) 2-wire Serial Bus Clock Line
 
 PORTD
 
