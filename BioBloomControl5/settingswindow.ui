@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsWindow</class>
+ <widget class="QWidget" name="SettingsWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>640</width>
+    <height>480</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>true</bool>
+  </property>
+  <widget class="QPushButton" name="BackButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>30</y>
+     <width>161</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/BackButtonIcon.png</normaloff>:/BackButtonIcon.png</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>161</width>
+     <height>161</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="MuteButton">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>30</y>
+     <width>161</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/MuteButtonIcon.jpg</normaloff>:/MuteButtonIcon.jpg</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>141</width>
+     <height>141</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ToggleLEDButton">
+   <property name="geometry">
+    <rect>
+     <x>240</x>
+     <y>280</y>
+     <width>161</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/ToggleLEDButtonIcon.PNG</normaloff>:/ToggleLEDButtonIcon.PNG</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>161</width>
+     <height>161</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="RGBControlButton">
+   <property name="geometry">
+    <rect>
+     <x>450</x>
+     <y>280</y>
+     <width>161</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/RGBControlButtonIcon.PNG</normaloff>:/RGBControlButtonIcon.PNG</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>161</width>
+     <height>161</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="ToggleWaterButton">
+   <property name="geometry">
+    <rect>
+     <x>30</x>
+     <y>280</y>
+     <width>161</width>
+     <height>161</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string/>
+   </property>
+   <property name="icon">
+    <iconset resource="Resources/biobloom.qrc">
+     <normaloff>:/ToggleWaterButtonIcon.PNG</normaloff>:/ToggleWaterButtonIcon.PNG</iconset>
+   </property>
+   <property name="iconSize">
+    <size>
+     <width>200</width>
+     <height>200</height>
+    </size>
+   </property>
+   <property name="flat">
+    <bool>true</bool>
+   </property>
+  </widget>
+ </widget>
+ <resources>
+  <include location="Resources/biobloom.qrc"/>
+ </resources>
+ <connections/>
+</ui>
