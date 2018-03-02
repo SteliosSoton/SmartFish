@@ -195,10 +195,25 @@ void perform_action_request(String action_id){
 
   if(action_id=="water"){ //i.e water the plant
   //SEND OVER SPI TO WATER THE PLANT
+    Serial.println("Watering...");
   }
 
   if(action_id=="leds"){ //i.e turn on leds
   //SEND OVER SPI TO TURN ON LEDS
+    Serial.println("Pretty Lights!");
+  }
+  
+  if(action_id=="mute"){ //i.e turn on leds
+  //SEND OVER SPI TO TURN ON LEDS
+    Serial.println("ssshhhhhhhh");
+    tx.versionNum = 0x01;           // version 1.0
+    tx.command = 0x03;              // audio command
+    tx.commandInfoLength = 0x03;    // 3 data codes to follow
+    tx.commandInfo[0] = 0x06;       // Command - Set volume
+    tx.commandInfo[1] = 0x00;       // Buffer
+    tx.commandInfo[2] = 0x00;       // Volume - 0 (0x00)
+    tx.feedback = 0x00;             // no feedback needed
+    sendTx(tx, 0);                  // send this command over SPI (no feedback)
   }
 }
 
@@ -278,10 +293,10 @@ void setup() {
   //START WIFI, CONNECT TO HUB
   WiFi.hostname(mac_address_string);
   WiFi.begin(ssid, password);
-  //while(WiFi.status()!= WL_CONNECTED){
-  //  delay(500);
-  //  Serial.print(".");
-  //}
+  while(WiFi.status()!= WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+   }
    ip = WiFi.localIP();
   Serial.println(ip);
   
@@ -345,7 +360,7 @@ void loop() {
   server.handleClient(); //CHECKS FOR THE ABOVE REQUESTS
   refresh();  //will check if ip needs updated
 
-  /* MATT SPI STUFFS */
+  /* MATT SPI STUFFS
   delay(1000);
 
   if(x==1) sensor_info_request(); // manually call the getADCdata function
