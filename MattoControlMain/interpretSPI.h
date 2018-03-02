@@ -10,10 +10,12 @@
 
 #include "UART_audio_module.h"
 #include "pump_control.h"
+#include "RGB_control.h"
 
 #define WATER_PLANT 0x01
 #define REQUEST_SENSOR_DATA 0x02
 #define AUDIO 0x03
+#define RGB_CONTROL 0x04
 
 int muted = 0;	// boolean for mute toggle
 
@@ -49,6 +51,9 @@ void testReceived(SPIdata received){
     		else{
     			sendCommand(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
     		}
+    		break;
+    	case RGB_CONTROL:
+    		setRGBColour(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
     		break;
     	}
 }
