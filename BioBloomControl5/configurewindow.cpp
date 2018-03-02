@@ -43,10 +43,6 @@ void ConfigureWindow::applyButtonPressSlot(QString plantName, QString plantProfi
 
     postData.append(postKey).append("=").append(postValue).append("&").append(postKey2).append("=").append(postValue2).append("&").append(postKey3).append("=").append(postValue3).append("&");
     manager->post(request,postData);
-
-
-    parentUnitImage->plantProfileTemplate(newPlantProfile);
-
 }
 
 void ConfigureWindow::setupPlantProfiles()

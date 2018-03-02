@@ -70,7 +70,7 @@ void MainWindow::addButtonPressSlot()
     unitAddress[unitTotal]->setUnitNumber(unitTotal);
     ribbonAddress[unitTotal]->setRibbonNumber(unitTotal);
 
-    unitAddress[unitTotal]->plantProfileTemplate(unitAddress[unitTotal]->configureWindowAddress->plantProfile[0]);
+    unitAddress[unitTotal]->setPlantProfileTemplate(unitAddress[unitTotal]->configureWindowAddress->plantProfile[0]);
 
     updateRibbon(unitTotal, unitTotal);
 

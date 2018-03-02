@@ -20,7 +20,7 @@ void UnitWorker::process()
 
     waterLevelCheck();
     
-    finishedSignal();
+    //finishedSignal();
 }
 
 /*              Class Methods              */

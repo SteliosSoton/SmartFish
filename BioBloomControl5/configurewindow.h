@@ -18,6 +18,8 @@ public:
     explicit ConfigureWindow(QString unitMacAddress, BioBloomUnit* inputParentUnit, QWidget *parent = 0);
     ~ConfigureWindow();
 
+    Ui::ConfigureWindow *ui;
+
     QVector<PlantProfile*> plantProfile;
 
     QString unitMacAddress;
@@ -31,8 +33,6 @@ public slots:
     void plantTypeSelectionSlot(QString inputPlantType);
 
 private:                                                //POSSIBLE IMAGES - NOT HARD
-    Ui::ConfigureWindow *ui;
-
     BioBloomUnit* parentUnitImage;
 
     void setupComboBox();

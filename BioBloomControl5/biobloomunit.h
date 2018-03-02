@@ -33,8 +33,8 @@ public:
 
     QNetworkAccessManager *unitNetworkManagerAddress;
 
-    void setPlantProfileTemplate(PlantProfile* inputPlantProfile);          //ADD TO SOURCE
-    PlantProfile getPlantProfileTemplate();                                 //ADD TO SOURCE
+    void setPlantProfileTemplate(PlantProfile* inputPlantProfile);
+    PlantProfile* unitPlantProfile;
 
     /*          Identity Accessor Methods           */
     int getUnitNumber();
@@ -83,7 +83,6 @@ private:
     QString macAddress;
     QString plantName;
     QString plantType;
-    PlantProfile unitPlantProfile;                                  //ADD TO SOURCE
 
     /*              Reference Objects               */
     int idealTemp;

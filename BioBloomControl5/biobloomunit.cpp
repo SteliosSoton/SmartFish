@@ -152,9 +152,10 @@ void BioBloomUnit::changeCurrentHumidity(double inputHumidity)
 /*              Class Methods               */
 void BioBloomUnit::setPlantProfileTemplate(PlantProfile* inputPlantProfile)
 {
-    setPlantType(inputPlantProfile->plantTypeName);
-    setIdealTemp(inputPlantProfile->idealTemp);
-    setIdealMoisture(inputPlantProfile->idealTemp);
-    setIdealHumidity(inputPlantProfile->idealHumidity);
+    unitPlantProfile = new PlantProfile(inputPlantProfile->plantTypeName,
+                                        inputPlantProfile->idealTemp,
+                                        inputPlantProfile->idealLight,
+                                        inputPlantProfile->idealMoisture,
+                                        inputPlantProfile->idealHumidity);
 }
 
