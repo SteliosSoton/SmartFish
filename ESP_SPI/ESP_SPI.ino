@@ -125,7 +125,7 @@ void readADCData()
   SPI.transfer(0x07d);            // send marker for start of 2-way transmission
   digitalWrite(ss_pin, HIGH);
   
-  for(uint8_t i=0; i<5; i++) {
+  for(uint8_t i=0; i<7; i++) {
     digitalWrite(ss_pin, LOW);
     delay(10);
     ADCdata[i] = SPI.transfer(i); // send increment values to get the 3 data bytes
@@ -145,8 +145,10 @@ void readADCData()
 void doSomethingWithADCData(){
   int batteryData = ADCdata[1];   // convert back to correct format
   int lightData = ADCdata[2];                 // convert light format
-  int humidityData = ADCdata[3];              // convert humidity format
-  int data1 = ADCdata[4];                     // 50 = ok, 100 = error
+  int tempData = ADCdata[3];              // convert humidity format
+  int humidityData = ADCdata[4];                 // convert light format
+  int something1 = ADCdata[5];              // convert humidity format
+  int data1 = ADCdata[6];                     // 50 = ok, 100 = error
   int failed = 0;                             // variable to track failure on recieved data (needs to be reset each time to 0)
 
   // did the slave send any data? Or did it just echo back what it was sent?
@@ -174,9 +176,13 @@ void doSomethingWithADCData(){
   Serial.print("Battery: ");
   Serial.println(batteryData);
   Serial.print("Temp: ");
-  Serial.println(lightData);
+  Serial.println(tempData);
   Serial.print("Light: ");
+  Serial.println(lightData);
+  Serial.print("Humidity: ");
   Serial.println(humidityData);
+  Serial.print("Something1: ");
+  Serial.println(something1);
   Serial.print("Data: ");
   Serial.println(data1);
 
@@ -186,6 +192,19 @@ void doSomethingWithADCData(){
   }
   else if(failed == 0){
     Serial.println("[SUCCESS!]");
+    Serial.println("Sending...");
+    Serial.print(lightData);
+    Serial.print("\t");
+    Serial.print(100);
+    Serial.print("\t");
+    Serial.print(humidityData);
+    Serial.print("\t");
+    Serial.print(tempData);
+    Serial.print("\t");
+    Serial.print(50);
+    Serial.print("\t");
+    Serial.print(batteryData);
+    transmit_sensor_data(lightData, 100, humidityData, tempData, 50, batteryData);
   }
 }
 
@@ -195,10 +214,25 @@ void perform_action_request(String action_id){
 
   if(action_id=="water"){ //i.e water the plant
   //SEND OVER SPI TO WATER THE PLANT
+    Serial.println("Watering...");
   }
 
   if(action_id=="leds"){ //i.e turn on leds
   //SEND OVER SPI TO TURN ON LEDS
+    Serial.println("Pretty Lights!");
+  }
+  
+  if(action_id=="mute"){ //i.e turn on leds
+  //SEND OVER SPI TO TURN ON LEDS
+    Serial.println("ssshhhhhhhh");
+    tx.versionNum = 0x01;           // version 1.0
+    tx.command = 0x03;              // audio command
+    tx.commandInfoLength = 0x03;    // 3 data codes to follow
+    tx.commandInfo[0] = 0x06;       // Command - Set volume
+    tx.commandInfo[1] = 0x00;       // Buffer
+    tx.commandInfo[2] = 0x00;       // Volume - 0 (0x00)
+    tx.feedback = 0x00;             // no feedback needed
+    sendTx(tx, 0);                  // send this command over SPI (no feedback)
   }
 }
 
@@ -278,10 +312,10 @@ void setup() {
   //START WIFI, CONNECT TO HUB
   WiFi.hostname(mac_address_string);
   WiFi.begin(ssid, password);
-  //while(WiFi.status()!= WL_CONNECTED){
-  //  delay(500);
-  //  Serial.print(".");
-  //}
+  while(WiFi.status()!= WL_CONNECTED){
+    delay(500);
+    Serial.print(".");
+   }
    ip = WiFi.localIP();
   Serial.println(ip);
   
@@ -345,7 +379,7 @@ void loop() {
   server.handleClient(); //CHECKS FOR THE ABOVE REQUESTS
   refresh();  //will check if ip needs updated
 
-  /* MATT SPI STUFFS */
+  /* MATT SPI STUFFS
   delay(1000);
 
   if(x==1) sensor_info_request(); // manually call the getADCdata function
@@ -357,6 +391,5 @@ void loop() {
   
  //CHECK SPI FOR INCOMING SENSOR DATA
  
-//transmit_sensor_data(int light_level, int air_humidity, int soil_moisture, int temperature, int water_level, int battery_level);
 }
 

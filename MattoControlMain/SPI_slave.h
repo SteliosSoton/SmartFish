@@ -25,6 +25,8 @@ volatile int slaveTransmit = 0;
 volatile int ZeroRX;
 volatile int OneRX;
 volatile int TwoRX;
+volatile int ThreeRX;
+volatile int FourRX;
 volatile int slaveTransmitStarted;
 
 #define WATER_PLANT 0x01			// header tags for data sent in "command"
@@ -99,8 +101,18 @@ void SetSlaveRegister(char aaaa){
 		//printf("transmit.commandInfo[2]: %x\n", transmit.commandInfo[2]);
 		TwoRX = 1;
 	}
+	else if(aaaa == 0x03){
+		SPDR = transmit.commandInfo[3];
+		//printf("transmit.commandInfo[2]: %x\n", transmit.commandInfo[2]);
+		ThreeRX = 1;
+	}
+	else if(aaaa == 0x04){
+		SPDR = transmit.commandInfo[4];
+		//printf("transmit.commandInfo[2]: %x\n", transmit.commandInfo[2]);
+		FourRX = 1;
+	}
 	else{
-		int sum = ZeroRX + OneRX + TwoRX;
+		int sum = ZeroRX + OneRX + TwoRX + ThreeRX + FourRX;
 		//SPDR = sum;	// random value to test
 		//printf("Sum: %d", sum);
 
@@ -108,7 +120,7 @@ void SetSlaveRegister(char aaaa){
 			//printf("\n\n[slaveTransmit - SUCCESSFUL]\n");
 			if(slaveTransmitStarted == 1){
 				//printf("[Started - SUCCESSFUL]\n");
-				if(sum == 3){
+				if(sum == 5){
 					//printf("[Sum - SUCCESSFUL]\n");
 					SPDR = 0x32; // set register to success tag 0x32 (d50)
 				}
@@ -165,6 +177,7 @@ ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (w
 
 		case END:
 			if(validCommand) { // Checks if start bit has been seen before end bit - Other wise it knows it started to see transmission after it began
+		    	testReceived(receive);	// interpret the received command in "interpretSPI.h"
 				validCommand = 0; // Command is over so this is reset
 				commandInfoLengthCounter = 0; //Resets for next receive
 				transmissionCounter = 0; //Resets for next transmission
@@ -173,6 +186,8 @@ ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (w
 					ZeroRX = 0;
 					OneRX = 0;
 					TwoRX = 0;
+					ThreeRX = 0;
+					FourRX = 0;
 					slaveTransmitStarted = 0;
 					SPIStatus = TRANSMIT_MODE;	// Sets program to transmission mode to reply to master
 					setupTransmitData();		// Setup transmit data ready to fill slave transmit register
@@ -212,8 +227,6 @@ ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (w
 				}
 			}
 		}
-
-    	testReceived(receive);	// interpret the received command in "interpretSPI.h"
 
     break;
     }

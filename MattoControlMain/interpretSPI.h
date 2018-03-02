@@ -15,6 +15,8 @@
 #define REQUEST_SENSOR_DATA 0x02
 #define AUDIO 0x03
 
+int muted = 0;	// boolean for mute toggle
+
 uint16_t * sensorArray;	// array to hold sensor data
 
 uint16_t *getSensorArray(void){
@@ -33,7 +35,20 @@ void testReceived(SPIdata received){
     		sensorArray = getSensorData();
     		break;
     	case AUDIO:	// audio
-    		sendCommand(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
+    		if(received.commandInfo[0] == 0x06){	// mute toggle command
+    			printf("toggling mute: %d\n", muted);
+    			if(muted == 0){
+    				sendCommand(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]); // mute it as requested
+    				muted = 1;
+    			}
+    			else if(muted == 1){
+    				sendCommand(received.commandInfo[0], received.commandInfo[1], 0x1E);	// unmute it back to volume 20 (0x14)
+    				muted = 0;
+    			}
+    		}
+    		else{
+    			sendCommand(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
+    		}
     		break;
     	}
 }

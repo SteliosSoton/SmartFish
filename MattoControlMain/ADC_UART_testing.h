@@ -15,8 +15,6 @@
 #include "power_saving.h"
 #include "ADC.h"
 
-#define SENSOR_COUNT 2
-
 ISR(USART0_RX_vect) {
 	printf("\nReceived: %c", UDR0);
 

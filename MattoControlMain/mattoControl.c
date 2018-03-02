@@ -8,7 +8,7 @@
 #include "power_saving.h"
 #include "SPI_slave.h"
 #include "external_interrupt.h"
-#include "ADC_UART_testing.h" //Comment out when not needed
+//#include "ADC_UART_testing.h" // COMMENT OUT WHEN USING AUDIO MODULE
 #include "interpretSPI.h"
 #include "UART_audio_module.h"
 
