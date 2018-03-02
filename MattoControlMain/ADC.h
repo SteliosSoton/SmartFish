@@ -17,7 +17,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define SENSOR_COUNT 3
+#define SENSOR_COUNT 4
 
 void init_adc(void);
 uint16_t *getSensorData(void);

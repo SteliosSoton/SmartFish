@@ -11,6 +11,7 @@
 #include "ADC_UART_testing.h" //Comment out when not needed
 #include "interpretSPI.h"
 #include "UART_audio_module.h"
+#include "RGB_control.h"
 
 int main(void)
 {
@@ -27,14 +28,16 @@ int main(void)
     init_adc();
     printf("\nADC init complete");
     initHumiditySense();
-    printf("\nAll System Senses Activated.");
+    printf("\nHumidity sensor enabled.");
     init_power_saving();
-    printf("\nPower saving complete:\nttwi disabled \n\tusart1 disabled");
+    printf("\nPower saving complete:\nttwi disabled");
     init_spi_slave();
     printf("\nSPI slave enabled");
-    init_external_interrupts();
-    printf("\nInt0 enabled");
-    printf("\nADC_UART_testing included: type any char to active all channels ADC.");
+    //init_external_interrupts();
+    //printf("\nInt0 enabled");
+    //printf("\nADC_UART_testing included: type any char to active all channels ADC.");
+    init_RGB_LEDs();
+    printf("\nRGB control enabled");
     _delay_ms(1); //Device enters sleep too fast for UART to send data 
     
 	while(1) { enterSleepMode(IDLE); //Keep device in IDLE while waiting for SPI transfer complete interrupt

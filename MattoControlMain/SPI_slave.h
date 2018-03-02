@@ -2,7 +2,7 @@
  * SPI.h
  *
  *  Created on: Feb 25, 2018
- *      Author: NRS1G15
+ *      Author: NRS1G15 and MP7G16
  */
 
 #ifndef SPI_SLAVE_H_
@@ -14,6 +14,7 @@
 #include "dataStruct.h"
 #include "interpretSPI.h"
 #include "UART_audio_module.h"
+#include "RGB_control.h"
 
 #define RECEIVE_MODE 'R'
 #define TRANSMIT_MODE 'T'
@@ -30,6 +31,7 @@ volatile int slaveTransmitStarted;
 #define WATER_PLANT 0x01			// header tags for data sent in "command"
 #define REQUEST_SENSOR_DATA 0x02	// actually hex data/command sent in "commadInfo"
 #define AUDIO 0x03
+#define RGB_CONTROl 0x04
 
 volatile char SPIStatus = RECEIVE_MODE; //Tells SPI interrupt which mode to be in, transmission or receive
 
@@ -128,7 +130,6 @@ void SetSlaveRegister(char aaaa){
 		}
 	}
 }
-
 
 ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (works by when SPDR is full it creates interrupt flag).
 	static char transmissionCounter = 0; 			//Keeps track of current stage in communications.
