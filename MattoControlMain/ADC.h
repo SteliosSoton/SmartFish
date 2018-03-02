@@ -61,25 +61,28 @@ uint16_t *getSensorConvertedData(void)
 {
 	static uint16_t *sensorData = 0; //Static so only created once and not a new instance each time...thats a memory leak!
 	if(sensorData == 0) //if sensor data is empty aka first time initialized
-		sensorData = malloc(SENSOR_COUNT); //Creates memory space size of sensor count. This memory is used as an array to store the sensor data.
-    for(uint8_t i = 0; i < SENSOR_COUNT; i++) {
+		sensorData = malloc(SENSOR_COUNT+1); //Creates memory space size of sensor count. This memory is used as an array to store the sensor data.
+    for(uint8_t i = 0; i <= SENSOR_COUNT; i++) {
     	switch(i) {
     	case 0:
-    		sensorData[0] = getBatteryLevel(ADCResults[i + 1]); //Battery level sensor assumed to be on ADC channel 0
-    		//printf("\nBattery level: %d", sensorData[0]);
+    		sensorData[i] = getBatteryLevel(ADCResults[i + 1]); //Battery level sensor assumed to be on ADC channel 0
+    		printf("\nBattery Level\t: \t%d%%", sensorData[i]);
     		break;
     	case 1:
-    		sensorData[1] = getTemperature(ADCResults[i + 2]); //Temperature sensor assumed to be on ADC channel 1
-    		//printf("\nTemperature level: %d", sensorData[1]);
+    		sensorData[i] = getTemperature(ADCResults[i + 1]); //Temperature sensor assumed to be on ADC channel 1
+    		printf("\nTemperature\t: \t%d *C1", sensorData[i]);
     		break;
     	case 2:
-    		sensorData[2] = getLDRpercentage(ADCResults[i + 3]); //Temperature sensor assumed to be on ADC channel 1
-    		//printf("\nLight level: %d", sensorData[2]);
+    		sensorData[i] = getLDRpercentage(ADCResults[i + 1]); //Temperature sensor assumed to be on ADC channel 1
+    		printf("\nLight Intensity\t: \t%d%%", sensorData[i]);
+    		break;
+    	case 3:
+    		sensorData[i] = getHumidityPercentage();
+    		printf("\nHumidity Percentage\t: \t%u%%", sensorData[i]);
     		break;
     	}
-    	//printf("\nChannel %d: %4d", i, ADCResults[i + 1]);
+    	printf("\nChannel %d \t:\t%4d", i, ADCResults[i + 1]);
     }
     return sensorData;
 }
-
 #endif /* ADC_H_ */

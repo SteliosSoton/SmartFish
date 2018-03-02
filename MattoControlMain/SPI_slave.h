@@ -55,20 +55,22 @@ uint8_t setupTransmitData() { //Gets the data requested by ESP command
 	sensorData = getSensorArray();	// get array from  ADC.h
 
 	// convert ADC double values into hex
-	int ADCdata0I = sensorData[0];	// can only do to 3 decimal places as a byte is 8 bits [largest = 255 (25.5)]
-	char ADCdata0 = ADCdata0I;
-	char ADCdata1 = sensorData[1];
-	char ADCdata2 = sensorData[2];
-
+	//int ADCdata0I = sensorData[0];	// can only do to 3 decimal places as a byte is 8 bits [largest = 255 (25.5)]
+	//char ADCdata0 = ADCdata0;
+	//char ADCdata1 = sensorData[1];
+	//char ADCdata2 = sensorData[2];
+	char sizeOfSensorData = sizeof(sensorData)/sizeof(sensorData[0]);
 	printf("%d, %d, %d\n", sensorData[0], sensorData[1],sensorData[2]);
-	printf("%x, %x, %x\n\n", ADCdata0, ADCdata1, ADCdata2);
 
 	transmit.version = 0x01;				// fill slave register as normal
 	transmit.command = REQUEST_SENSOR_DATA; //send back command to master to ensure request was correctly identified
-	transmit.commandInfoLength = 0x03;		// 3 bytes of info - battery level, light, humidity
-	transmit.commandInfo[0] = ADCdata0;		// battery data
-	transmit.commandInfo[1] = ADCdata1;		// light data
-	transmit.commandInfo[2] = ADCdata2;		// humidity data
+	transmit.commandInfoLength = sizeOfSensorData;		// 3 bytes of info - battery level, light, humidity
+	for(uint8_t i = 0; i < sizeOfSensorData; i++)
+		transmit.commandInfo[i] = (char)sensorData[i];
+	//transmit.commandInfo[0] = (char)sensorData[0];		// battery data
+	//transmit.commandInfo[1] = (char)sensorData[1];		// light data
+	//transmit.commandInfo[2] = (char)sensorData[2];		// temp data
+	//transmit.commandInfo[3] = (char)sensorData[3];		// humidity data
 	transmit.feedback = 0x00;
 
 	dataRequestComplete = 1; //Successful data request so return value set to 1

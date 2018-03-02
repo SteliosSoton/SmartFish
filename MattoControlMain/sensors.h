@@ -14,32 +14,25 @@ volatile uint16_t humidityResults[HUMIDITY_SENSORS +1]; /*array for holding humi
 														knows which bit to place result in*/
 double getBatteryLevel(uint16_t ADCData)
 {
-	printf("Battery: %d\n",ADCData);
 	double ADCV = (ADCData*3.3)/1024;
 	double dividerNetwork = 120217.0 /(389735 + 120217);
     double percentage = 18.182 * (ADCV/dividerNetwork) - 118.18;
-    // percentage 0% = 6.5V as this is when the regulator stops working properly
     if(percentage > 100)
     	return 100;
-    else if(percentage < 0)
-    	return 0;
     else
     	return percentage; //Convert ADC hex to voltage then potential divider network of measured resistances
 }
 
 uint8_t getLDRpercentage(uint16_t ADCValue){
 
-	printf("Light: %d\n",ADCValue);
-
 	double voltage = ADCValue*3.3/1024; /*Convert to voltage*/
 
 	if(voltage<=0.074) return 0;
 	else if(voltage>=1.931) return 100;
-	else return 24.516*(voltage*voltage*voltage) - 36.362*(voltage*voltage) + 32.111*(voltage) + 4.2014;
+	else return (24.516*(voltage*voltage*voltage) - 36.362*(voltage*voltage) + 32.111*(voltage) + 4.2014);
 }
 
 uint16_t getTemperature(uint16_t ADCValue) {
-	printf("Temp: %d\n",ADCValue);
 	double voltage = ADCValue*3.3/1024; /*Convert to voltage*/
 
 	return voltage*100 - 273; /*Temperature formula, accurate enough.. */ //????? how does this work -Magic!
@@ -58,7 +51,7 @@ void initHumiditySense(void){
 	PORTC &= ~_BV(0) & ~_BV(1);/*Pull down the resistors*/
 }
 
-void getHumidityPercentage(void){/*Not yet percentage, more of a humidity id->needs soil testing to associate with humidity states*/
+uint8_t getHumidityPercentage(void){/*Not yet percentage, more of a humidity id->needs soil testing to associate with humidity states*/
 	TCNT1 = 0x0000; /* Clear Timer 1 */
 	for(uint8_t  i=1; i<(HUMIDITY_SENSORS+1); i++) {/* Go through all the soil humidity sensors*/
 
@@ -81,6 +74,8 @@ void getHumidityPercentage(void){/*Not yet percentage, more of a humidity id->ne
 		humidityResults[i] = TCNT1; /* Read Timer 1*/
 		TCNT1 = 0x0000; /* Clear Timer 1 */
 
+		humidityResults[i]=humidityResults[i]/4045.0*100;
+
 		switch(i) {
 		case 1:
 			PINC |= _BV(0);/*Deactivate first Sensor*/
@@ -90,6 +85,7 @@ void getHumidityPercentage(void){/*Not yet percentage, more of a humidity id->ne
 			break;/*Add cases for extra sensors */
 		}
 	}
+ return humidityResults[1];
 
 }
 #endif /* SENSORS_H_ */

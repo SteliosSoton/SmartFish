@@ -26,8 +26,10 @@ int main(void)
 	printf("\nUART1 init for audio module complete");
     init_adc();
     printf("\nADC init complete");
+    initHumiditySense();
+    printf("\nAll System Senses Activated.");
     init_power_saving();
-    printf("\nPower saving complete:\n\ttimer0 disabled \n\ttimer1 disabled \n\ttwi disabled \n\tusart1 disabled");
+    printf("\nPower saving complete:\nttwi disabled \n\tusart1 disabled");
     init_spi_slave();
     printf("\nSPI slave enabled");
     init_external_interrupts();
