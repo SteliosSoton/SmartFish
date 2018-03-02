@@ -3,6 +3,7 @@
 
 #include <QWidget>
 #include <QtNetwork/QNetworkAccessManager>
+#include <QDebug>
 
 namespace Ui {class SettingsWindow;}
 
@@ -20,6 +21,9 @@ public slots:
     void RGBControlButtonPressSlot();
     void toggleLEDButtonPressSlot();
     void toggleWaterButtonPressSlot();
+    void replyFinished(QNetworkReply*);
+    void finished(QNetworkReply*);
+    void dataRequestTestFunction();
 
 private:
     Ui::SettingsWindow *ui;
