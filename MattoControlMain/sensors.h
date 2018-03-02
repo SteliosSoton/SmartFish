@@ -47,8 +47,8 @@ void initHumiditySense(void){
 	TCCR1C= 0x00;
 	TCNT1 = 0x0000;
 
-	DDRC |= _BV(0) | _BV(1);/*Set Pins C0, C1 as outputs (for activating the humidity sensors), Add more for more sensors*/
-	PORTC &= ~_BV(0) & ~_BV(1);/*Pull down the resistors*/
+	DDRC |= _BV(0) | _BV(6);/*Set Pins C0, C1 as outputs (for activating the humidity sensors), Add more for more sensors*/
+	PORTC &= ~_BV(0) & ~_BV(6);/*Pull down the resistors*/
 }
 
 uint8_t getHumidityPercentage(void){/*Not yet percentage, more of a humidity id->needs soil testing to associate with humidity states*/
