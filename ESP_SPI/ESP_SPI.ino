@@ -279,6 +279,27 @@ void sensor_info_request(){
   sendTx(tx, 1);                  // send this command over SPI (request feedback)
 }
 
+void rgb_request(String red, String green, String blue){
+  int redI = atoi(red.c_str());   // convert red value to int
+  int greenI = atoi(green.c_str());   // convert red value to int
+  int blueI = atoi(blue.c_str());   // convert red value to int
+  Serial.print("RGBs: ");
+  Serial.print(redI);
+  Serial.print("\t");
+  Serial.print(greenI);
+  Serial.print("\t");
+  Serial.print(blueI);
+  
+  tx.versionNum = 0x01;           // version 1.0
+  tx.command = 0x04;              // sensor data request
+  tx.commandInfoLength = 0x03;    // 3 data codes to follow
+  tx.commandInfo[0] = redI;        // red 0/1
+  tx.commandInfo[1] = greenI;      // green 0/1
+  tx.commandInfo[2] = blueI;       // blue 0/1
+  tx.feedback = 0x00;             // feedback needed
+  Serial.println("\nrgb_request sendTx\n");
+  sendTx(tx, 0);                  // send this command over SPI (request feedback)
+}
 
 void transmit_sensor_data(int light_level, int air_humidity, int soil_moisture, int temperature, int water_level, int battery_level){
   if(WiFi.status() == WL_CONNECTED){ //if wifi connected
@@ -332,6 +353,19 @@ void setup() {
   delay(50);
   digitalWrite(5, LOW);
   sensor_info_request(); 
+  });
+
+  //WHEN RGB REQUEST RECEIVED 
+  server.on("/rgb_request",[]()
+  {
+  Serial.println("RGB REQUEST RECIEVED");
+  digitalWrite(5, HIGH);
+  delay(50);
+  digitalWrite(5, LOW);
+  String red = server.arg("r");
+  String green = server.arg("g");
+  String blue = server.arg("b");
+  rgb_request(red, green, blue); 
   });
 
 

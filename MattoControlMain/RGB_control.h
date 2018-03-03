@@ -31,6 +31,8 @@ void toggleLED(char led, uint8_t status) {
 		PORTC &= ~_BV(led);
 }
 void setRGBColour(uint8_t red, uint8_t green, uint8_t blue) {
+	printf("\nsetRGBcolour() in RGB_control.h\n");
+	printf("R: %d\nG: %d\nB: %d\n", red, green, blue);
 	toggleLED(REDLED, red);
 	toggleLED(BLUELED, blue);
 	toggleLED(GREENLED, green);

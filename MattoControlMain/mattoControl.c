@@ -37,7 +37,7 @@ int main(void)
     //printf("\nInt0 enabled");
     //printf("\nADC_UART_testing included: type any char to active all channels ADC.");
     init_RGB_LEDs();
-    printf("\nRGB control enabled");
+    printf("\nRGB control enabled\n\n");
     _delay_ms(1); //Device enters sleep too fast for UART to send data 
     
 	while(1) { enterSleepMode(IDLE); //Keep device in IDLE while waiting for SPI transfer complete interrupt

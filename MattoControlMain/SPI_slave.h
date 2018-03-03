@@ -64,7 +64,7 @@ uint8_t setupTransmitData() { //Gets the data requested by ESP command
 	//char ADCdata1 = sensorData[1];
 	//char ADCdata2 = sensorData[2];
 	char sizeOfSensorData = sizeof(sensorData)/sizeof(sensorData[0]);
-	printf("%d, %d, %d\n", sensorData[0], sensorData[1],sensorData[2]);
+	printf("Sensor Data: %d, %d, %d\n", sensorData[0], sensorData[1],sensorData[2]);
 
 	transmit.version = 0x01;				// fill slave register as normal
 	transmit.command = REQUEST_SENSOR_DATA; //send back command to master to ensure request was correctly identified
@@ -116,7 +116,7 @@ void SetSlaveRegister(char aaaa){
 	else{
 		int sum = ZeroRX + OneRX + TwoRX + ThreeRX + FourRX;
 		//SPDR = sum;	// random value to test
-		//printf("Sum: %d", sum);
+		printf("Sum: %d\n", sum);
 
 		if(slaveTransmit == 1){
 			//printf("\n\n[slaveTransmit - SUCCESSFUL]\n");
@@ -183,7 +183,7 @@ ISR(SPI_STC_vect) { //interrupt handler for SPI complete transfer or received (w
 				commandInfoLengthCounter = 0; //Resets for next receive
 				transmissionCounter = 0; //Resets for next transmission
 				//printf("\nEnd command is: %x\n\n", receivedData);
-				if(receive.feedback) {
+				if(receive.feedback == 1) {
 					ZeroRX = 0;
 					OneRX = 0;
 					TwoRX = 0;

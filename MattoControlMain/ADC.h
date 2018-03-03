@@ -81,7 +81,7 @@ uint16_t *getSensorConvertedData(void)
     		printf("\nHumidity Percentage\t: \t%u%%", sensorData[i]);
     		break;
 	case 4:
-		sensorData[i] = getWaterLevel(ADCResults[i]);
+		//sensorData[i] = 0; //getWaterLevel(ADCResults[i]);
 		printf("\nWater Level\t: \t%d%%", sensorData[i]);
 		break;
     	}

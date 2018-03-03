@@ -88,21 +88,21 @@ uint8_t getHumidityPercentage(void){/*Not yet percentage, more of a humidity id-
  return humidityResults[1];
 
 }
+
 double getWaterLevel(uint16_t ADCData)
 {
 	double ADCV = (ADCData*3.3)/1024.0;
 	if (ADCV<=0.2) return 0;
-	else if ((ADCV>0.2)&&(ADVC<=0.3) return 20;
-	else if ((ADCV>0.3)&&(ADVC<=0.4) return 30;
-	else if ((ADCV>0.4)&&(ADVC<=0.5) return 40;
-	else if ((ADCV>0.5)&&(ADVC<=0.6) return 50;
-	else if ((ADCV>0.6)&&(ADVC<=0.7) return 60;
-	else if ((ADCV>0.7)&&(ADVC<=0.8) return 70;
-	else if ((ADCV>0.8)&&(ADVC<=0.9) return 80;
-	else if ((ADCV>0.9)&&(ADVC<=1) return 90;
+	else if ((ADCV>0.2)&&(ADCV<=0.3)) return 20;
+	else if ((ADCV>0.3)&&(ADCV<=0.4)) return 30;
+	else if ((ADCV>0.4)&&(ADCV<=0.5)) return 40;
+	else if ((ADCV>0.5)&&(ADCV<=0.6)) return 50;
+	else if ((ADCV>0.6)&&(ADCV<=0.7)) return 60;
+	else if ((ADCV>0.7)&&(ADCV<=0.8)) return 70;
+	else if ((ADCV>0.8)&&(ADCV<=0.9)) return 80;
+	else if ((ADCV>0.9)&&(ADCV<=1)) return 90;
 	else if ((ADCV>1)) return 100;
-		 
-    
+	else return 0;
 }
 
 #endif /* SENSORS_H_ */
