@@ -14,8 +14,8 @@
 
 void init_external_interrupts(void)
 {
-    DDRC &= ~_BV(2);
-    PORTC |= _BV(2); //PULL UP THE INPUT
+    DDRB &= ~_BV(2);
+    PORTB |= _BV(2); //PULL UP THE INPUT
     EICRA &= ~_BV(ISC21) & ~_BV(ISC20); //SET INT2 ACTIVE ON LOW LEVEL
     EICRA |= _BV(ISC01) | _BV(ISC11); //Set trigger to rising edge for INT0
     PORTD |= _BV(PD2); //Enable pull-up on INT0 pin

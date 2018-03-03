@@ -12,6 +12,7 @@
 #include "interpretSPI.h"
 #include "UART_audio_module.h"
 #include "RGB_control.h"
+#include "photosynthesis.h"
 
 int main(void)
 {
@@ -29,6 +30,8 @@ int main(void)
     printf("\nADC init complete");
     initHumiditySense();
     printf("\nHumidity sensor enabled.");
+    initPhotosynthesisAssist();
+    printf("\nPhotosynthesis Assist Enabled");
     init_power_saving();
     printf("\nPower saving complete:\nttwi disabled");
     init_spi_slave();

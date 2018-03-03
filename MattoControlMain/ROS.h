@@ -1,6 +1,6 @@
 #include <avr/io.h>
 #include "debug.h"
-#include "external_interupts.h"
+#include "external_interupt.h"
 #include "sensors.h"
 #include "RGB_control.h"
 
