@@ -34,7 +34,7 @@ PINB4 : (ESP) SPI Slave Select Input / Timer/Counter 0 Output Compare Match B Ou
 
 PINB3 : (-) Analog Comparator Negative Input / Timer/Counter 0 Output Compare Match A Output
 
-PINB2 : (Comms) Analog Comparator Positive Input / External Interrupt 2 Input
+PINB2 : (ROS) Analog Comparator Positive Input / External Interrupt 2 Input
 
 PINB1 : (MoistIn) Timer/Counter 1 External Counter Input / Divided System Clock Output
 
