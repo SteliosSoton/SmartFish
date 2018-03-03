@@ -16,6 +16,7 @@
 #include "sensors.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include "photosynthesis.h"
 
 #define SENSOR_COUNT 4
 
@@ -45,6 +46,7 @@ ISR(ADC_vect) //interrupt handler for completed adc conversion
 
 uint16_t *getSensorData(void)
 {
+	togglePhotosynthesisAssist();
     ADCResults[0] = 0; //Reset ADCResalt counter bit
     ADMUX = 0xc0; //Reset ADC channel back to 0
     ADCSRA |= _BV(ADEN); //Start conversion

@@ -37,7 +37,7 @@ int main(void)
     init_spi_slave();
     printf("\nSPI slave enabled");
     //init_external_interrupts();
-    //printf("\nInt0 enabled");
+    //printf("\nInt0,2 enabled");
     //printf("\nADC_UART_testing included: type any char to active all channels ADC.");
     init_RGB_LEDs();
     printf("\nRGB control enabled");
