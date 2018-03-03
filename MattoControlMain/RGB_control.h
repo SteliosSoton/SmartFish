@@ -15,9 +15,9 @@
 #define BLUELED PC3		//Port c pin 1 is blue leds
 
 void init_RGB_LEDs(void) {
-	DDRC = _BV(REDLED); 	//Sets port c pin 1 as output
-	DDRC = _BV(GREENLED);	//Sets port c pin 2 as output
-	DDRC = _BV(BLUELED);	//Sets port c pin 3 as output
+	DDRC |= _BV(REDLED); 	//Sets port c pin 1 as output
+	DDRC |= _BV(GREENLED);	//Sets port c pin 2 as output
+	DDRC |= _BV(BLUELED);	//Sets port c pin 3 as output
 
 	PORTC |= _BV(REDLED);	//Sets red led low (low turns off LEDs)
 	PORTC |= _BV(GREENLED); //Sets green led low
@@ -28,7 +28,7 @@ void toggleLED(char led, uint8_t status) {
 	if(status)
 		PORTC &= ~_BV(led);
 	else
-		PORTC &= ~_BV(led);
+		PORTC |= _BV(led);
 }
 void setRGBColour(uint8_t red, uint8_t green, uint8_t blue) {
 	printf("\nsetRGBcolour() in RGB_control.h\n");
