@@ -19,9 +19,9 @@ void init_RGB_LEDs(void) {
 	DDRC |= _BV(GREENLED);	//Sets port c pin 2 as output
 	DDRC |= _BV(BLUELED);	//Sets port c pin 3 as output
 
-	PORTC |= _BV(REDLED);	//Sets red led low (low turns off LEDs)
-	PORTC |= _BV(GREENLED); //Sets green led low
-	PORTC |= _BV(BLUELED);  //Sets blue led low
+	PORTC |= _BV(REDLED);	//Sets red led off (low turns on LEDs)
+	PORTC |= _BV(GREENLED); //Sets green led off
+	PORTC |= _BV(BLUELED);  //Sets blue led off
 }
 
 void toggleLED(char led, uint8_t status) {
