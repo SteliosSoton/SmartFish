@@ -17,7 +17,7 @@ int main(){
 	while(1){
 		_delay_ms(5000);
 		togglePhotosynthesisAssist();
-		if(PINC & _BV(4)){ printf("\n\nset low");}
+		if(PINC & _BV(1)){ printf("\n\nset low");}
 		else { printf("\n\nset high"); }
 
 	}
