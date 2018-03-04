@@ -1,0 +1,52 @@
+//SENDING NETWORK REQUEST
+
+QNetworkAccessManager *manager = new QNetworkAccessManager(this);
+    connect(manager, SIGNAL(finished(QNetworkReply*)), 
+            this, SLOT(graphDataFetchFinished(QNetworkReply*)));
+
+    QUrl url;
+    QByteArray postData;
+    url.setUrl("http://192.168.5.1:80/graph_data.php");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader,"application/x-www-form-urlencoded");
+
+    QString postKey = "mac";
+    QString postValue = ""; //GET JOE TO PASS THE MAC ADDRESS ID FOR THE RIGHT PLANT TO HERE 
+							// CAN GET HIM TO DO IT TOMORROW
+
+    qDebug() << request.url();
+    postData.append(postKey).append("=").append(postValue).append("&");
+    manager->post(request,postData);
+
+
+
+
+//SLOT FOR DATA RETURNED FROM NETWORK REQUEST
+// CHANGE 'void MainWindow' to correct class
+// ADD THIS SLOT TO HEADER
+	
+void MainWindow:: graphDataFetchFinished(QNetworkReply* reply)
+{
+    reply->deleteLater();
+    QByteArray data_reply = reply->readAll();
+    QString dataString(data_reply);
+   QStringList points_list = dataString.split( "," );
+   for(int i=0;i<points_list.count();i++)
+   if(points_list[i].isEmpty())
+   {
+       points_list.takeAt(i);
+   }
+   for(int i=0;i<points_list.count();i++)
+   {
+       qDebug()<< points_list[i];
+   }
+}
+
+//POINTS_LIST IS THE QStringList 
+//could change this string to be a global variable in the class, whatever you need bro
+//points_list[0], [6], [12] ... are light level
+//points_list[1], [7], [13] ... are air humidity
+//points_list[2], [8], [14] ... are soil moisture
+//points_list[3], [9], [15] ... are temperature
+//points_list[4], [10], [16] ... are water level
+//points_list[5], [11], [17] ... are battery level
