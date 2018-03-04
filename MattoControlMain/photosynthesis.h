@@ -12,14 +12,16 @@ void initPhotosynthesisAssist(void);
 void togglePhotosynthesisAssist(void);
 
 void initPhotosynthesisAssist(void){
-	DDRC |= _BV(1);
-	PORTC &= ~_BV(1);
+	MCUCR |= _BV(JTD);
+	MCUCR |= _BV(JTD);
+	DDRC |= _BV(4);
+	PORTC &= ~_BV(4);
 }
 
 void togglePhotosynthesisAssist(void){
-	if(PINC & _BV(1)){ printf("\n\nset low");}
+	if(PINC & _BV(4)){ printf("\n\nset low");}
 	else { printf("\n\nset high"); }
-	PINC |= _BV(1);
+	PINC |= _BV(4);
 
 
 }

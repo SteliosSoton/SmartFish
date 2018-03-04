@@ -13,6 +13,7 @@
 //#include "UART_audio_module.h"
 #include "RGB_control.h"
 #include "photosynthesis.h"
+#include "RGBW.h"
 
 int main(void)
 {
@@ -36,6 +37,8 @@ int main(void)
     printf("\nHumidity sensor enabled.");
     initPhotosynthesisAssist();
     printf("\nPhotosynthesis Assist Enabled");
+	initRGBW();
+	printf("\nRGBW Enabled");
     init_power_saving();
     printf("\nPower saving complete:\nttwi disabled");
     init_spi_slave();
