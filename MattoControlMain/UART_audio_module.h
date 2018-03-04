@@ -27,7 +27,8 @@ void send_byte(uint8_t byte)
 
 void send_data(UARTdata transmit)
 {
-	for(int x=0;x<8;x++)	// loops through 8 bytes of Transmit Data
+	int x;
+	for(x=0;x<8;x++)	// loops through 8 bytes of Transmit Data
 	{
 		switch(x){
 			case 0:

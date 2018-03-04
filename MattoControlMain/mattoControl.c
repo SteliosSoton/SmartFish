@@ -21,6 +21,10 @@ int main(void)
 	 * E.G when when using external interrupt for testing ADC comment out SPI init.
 	 */
 
+//	togglePhotosynthesisAssist();
+//	_delay_ms(3000);
+//	togglePhotosynthesisAssist();
+
 	init_debug_uart0();
     printf("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 	printf("\nUART0 debug init complete");
@@ -41,7 +45,7 @@ int main(void)
     printf("\nADC_UART_testing included: type any char to active all channels ADC.");
     init_RGB_LEDs();
     printf("\nRGB control enabled");
-    _delay_ms(1); //Device enters sleep too fast for UART to send data 
+    _delay_ms(1); //Device enters sleep too fast for UART to send data
     
 	while(1) { enterSleepMode(IDLE); //Keep device in IDLE while waiting for SPI transfer complete interrupt
     }

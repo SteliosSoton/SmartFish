@@ -64,7 +64,8 @@ uint16_t *getSensorConvertedData(void)
 	static uint16_t *sensorData = 0; //Static so only created once and not a new instance each time...thats a memory leak!
 	if(sensorData == 0) //if sensor data is empty aka first time initialized
 		sensorData = malloc(SENSOR_COUNT+1); //Creates memory space size of sensor count. This memory is used as an array to store the sensor data.
-    for(uint8_t i = 0; i <= SENSOR_COUNT; i++) {
+	uint8_t i;
+	for( i = 0; i <= SENSOR_COUNT; i++) {
     	switch(i) {
     	case 0:
     		sensorData[i] = getBatteryLevel(ADCResults[i + 1]); //Battery level sensor assumed to be on ADC channel 0

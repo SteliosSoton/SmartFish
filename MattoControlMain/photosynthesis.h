@@ -8,18 +8,20 @@
 #ifndef PHOTOSYNTHESIS_H_
 #define PHOTOSYNTHESIS_H_
 
-#include <avr/io.h>
-
 void initPhotosynthesisAssist(void);
 void togglePhotosynthesisAssist(void);
 
 void initPhotosynthesisAssist(void){
-	DDRB |= _BV(3);
-	PORTB &= ~_BV(3);
+	DDRC |= _BV(1);
+	PORTC &= ~_BV(1);
 }
 
 void togglePhotosynthesisAssist(void){
-	PINC ^= _BV(3);
+	if(PINC & _BV(1)){ printf("\n\nset low");}
+	else { printf("\n\nset high"); }
+	PINC |= _BV(1);
+
+
 }
 
 

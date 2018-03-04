@@ -69,7 +69,8 @@ uint8_t setupTransmitData() { //Gets the data requested by ESP command
 	transmit.version = 0x01;				// fill slave register as normal
 	transmit.command = REQUEST_SENSOR_DATA; //send back command to master to ensure request was correctly identified
 	transmit.commandInfoLength = sizeOfSensorData;		// 3 bytes of info - battery level, light, humidity
-	for(uint8_t i = 0; i < sizeOfSensorData; i++)
+	uint8_t i;
+	for( i = 0; i < sizeOfSensorData; i++)
 		transmit.commandInfo[i] = (char)sensorData[i];
 	//transmit.commandInfo[0] = (char)sensorData[0];		// battery data
 	//transmit.commandInfo[1] = (char)sensorData[1];		// light data
