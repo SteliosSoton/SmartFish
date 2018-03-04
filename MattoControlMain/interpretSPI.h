@@ -11,6 +11,7 @@
 #include "UART_audio_module.h"
 #include "pump_control.h"
 #include "RGB_control.h"
+#include "RGBW.h"
 
 #define WATER_PLANT 0x01
 #define REQUEST_SENSOR_DATA 0x02
@@ -18,6 +19,8 @@
 #define RGB_CONTROL 0x04
 
 int muted = 0;	// boolean for mute toggle
+
+uint8_t RGBStatus[3];
 
 uint16_t * sensorArray;	// array to hold sensor data
 
@@ -53,7 +56,8 @@ void testReceived(SPIdata received){
     		}
     		break;
     	case RGB_CONTROL:
-    		setRGBColour(received.commandInfo[0], received.commandInfo[1], received.commandInfo[2]);
+			RGBStatus[0]=received.commandInfo[0]; RGBStatus[1]=received.commandInfo[1]; RGBStatus[2]=received.commandInfo[2];
+			RGBWaterLevel();
     		break;
     	}
 }
