@@ -1,13 +1,13 @@
 <?php
 
 $mac = $_POST["mac"];
-$id = $_POST["id"];
-
+$volume = $_POST["volume"];
 
 echo $mac;
 echo "   ";
-echo $id;
+echo $volume;
 echo "   ";
+
 $database = new mysqli("localhost", "plant_connect", "teamholly", "BioBloom");
 
 if ($database->connect_error) {
@@ -22,8 +22,8 @@ $result = $database->query("SELECT local_ip FROM pot_details WHERE mac = '{$mac}
 
 $ip = $result->fetch_object()->local_ip;
 echo $ip;
-$url = 'http://' . $ip . ':4132/action_request';
-$data = array('id' => $id);
+$url = 'http://' . $ip . ':4132/volume_request';
+$data = array('volume' => $volume);
 
 $options = array(
     'http' => array(

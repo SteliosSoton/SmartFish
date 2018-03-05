@@ -1,12 +1,12 @@
 <?php
 
-$mac = $_POST["mac"];
-$light_level = $_POST["light_level"];
-$air_humidity = $_POST["air_humidity"];
-$soil_moisture = $_POST["soil_moisture"];
-$temperature = $_POST["temperature"];
-$water_level = $_POST["water_level"];
-$battery_level = $_POST["battery_level"];
+$mac = $_GET["mac"];
+$light_level = $_GET["light_level"];
+$air_humidity = $_GET["air_humidity"];
+$soil_moisture = $_GET["soil_moisture"];
+$temperature = $_GET["temperature"];
+$water_level = $_GET["water_level"];
+$battery_level = $_GET["battery_level"];
 
 
 

@@ -11,10 +11,10 @@ if ($database->connect_error) {
 //echo "\n";
 //echo "Connected successfully		";
 
-$result = $database->query("SELECT * FROM pot_details");
+$result = $database->query("SELECT * FROM pot_details WHERE plant_name IS NOT NULL");
 if ($result->num_rows > 0) {
 		while($row = $result->fetch_assoc()) {
-			echo "mac" . "," . $row[mac] . "," . "plant_profile" . "," . $row[plant_profile]. "," . "plant_name".  "," . $row[plant_name] . ",";			
+			echo $row[mac] . "," . $row[plant_profile]. "," . $row[plant_name] . ",";			
 		}
 	}		
 
