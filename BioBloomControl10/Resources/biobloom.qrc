@@ -1,0 +1,27 @@
+<RCC>
+    <qresource prefix="/">
+        <file>AddButtonIcon.png</file>
+        <file>BackButtonIcon.png</file>
+        <file>MusicButtonIcon.jpg</file>
+        <file>SettingsButtonIcon.png</file>
+        <file>MuteButtonIcon.jpg</file>
+        <file>RGBControlButtonIcon.PNG</file>
+        <file>ToggleLEDButtonIcon.PNG</file>
+        <file>ToggleWaterButtonIcon.PNG</file>
+        <file>UnmuteButtonIcon.png</file>
+        <file>ApplyButtonIcon.PNG</file>
+        <file>ConfigureButtonIcon.PNG</file>
+        <file>BlueLEDIcon.PNG</file>
+        <file>CyanLEDIcon.PNG</file>
+        <file>GreenLEDIcon.PNG</file>
+        <file>MagentaLEDIcon.PNG</file>
+        <file>ManualWaterIcon.PNG</file>
+        <file>RedLEDIcon.PNG</file>
+        <file>WaterDroplet.png</file>
+        <file>WhiteLEDIcon.PNG</file>
+        <file>YellowLEDIcon.PNG</file>
+        <file>MinusButtonIcon.png</file>
+        <file>PauseButtonIcon.png</file>
+        <file>PlayButtonIcon.png</file>
+    </qresource>
+</RCC>
