@@ -14,12 +14,14 @@ void initPhotosynthesisAssist(void);
 void togglePhotosynthesisAssist(void);
 
 void initPhotosynthesisAssist(void){
-	DDRB |= _BV(3);
-	PORTB &= ~_BV(3);
+	MCUCR |= _BV(JTD);
+	MCUCR |= _BV(JTD);
+	DDRC |= _BV(4);
+	PORTC &= ~_BV(4);
 }
 
 void togglePhotosynthesisAssist(void){
-	PINC ^= _BV(3);
+	PINC |= _BV(4);
 }
 
 
